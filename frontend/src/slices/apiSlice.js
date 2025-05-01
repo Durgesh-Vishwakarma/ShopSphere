@@ -9,6 +9,8 @@ const baseQuery = fetchBaseQuery({
 
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
+    }else {
+      console.warn('No token found in state');
     }
 
     return headers;
