@@ -18,52 +18,54 @@ connectDB(); // Connect to MongoDB
 
 const app = express();
 
+// ✅ CORS should come first — BEFORE other middleware
 app.use(
-   cors({
-     origin: 'https://shop-sphere-xi.vercel.app', // <-- your deployed frontend URL
-     credentials: true, // if you're using cookies or authentication
-   })
- );
+  cors({
+    origin: 'https://shop-sphere-xi.vercel.app', // Frontend URL on Vercel
+    credentials: true, // Allow cookies and headers
+  })
+);
 
-// Body parser middleware
+// ✅ Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Cookie parser middleware
+// ✅ Cookie parser middleware
 app.use(cookieParser());
 
-
+// ✅ API routes
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 
+// ✅ PayPal config route
 app.get('/api/config/paypal', (req, res) => 
-   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
+  res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 );
 
-
+// ✅ Serve uploaded files statically
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
+// ✅ Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-   // set static folder
-   app.use(express.static(path.join(__dirname, '/frontend/build')));
+  app.use(express.static(path.join(__dirname, '/frontend/build')));
 
-   // any route that is not api will be redirected to index.html
-   app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  );
+} else {
+  app.get('/', (req, res) => {
+    res.send('API running');
+  });
 }
 
-else {
-   app.get('/', (req, res) => {
-      res.send('API running');
-   });
-}
-
-
+// ✅ Custom error handlers
 app.use(notFound);
 app.use(errorHandler);
 
+// ✅ Start the server
 app.listen(PORT, () => {
-   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
