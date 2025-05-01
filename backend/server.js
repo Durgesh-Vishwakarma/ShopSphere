@@ -2,6 +2,8 @@ import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+
 dotenv.config();
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'; 
@@ -15,6 +17,13 @@ const PORT = process.env.PORT || 5000;
 connectDB(); // Connect to MongoDB
 
 const app = express();
+
+app.use(
+   cors({
+     origin: 'https://shop-sphere-xi.vercel.app', // <-- your deployed frontend URL
+     credentials: true, // if you're using cookies or authentication
+   })
+ );
 
 // Body parser middleware
 app.use(express.json());
