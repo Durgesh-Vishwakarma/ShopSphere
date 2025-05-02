@@ -1,3 +1,4 @@
+// filepath: [userController.js](http://_vscodecontentref_/5)
 import asyncHandler from '../middleware/asyncHandler.js';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
@@ -10,13 +11,12 @@ const authUser = asyncHandler(async (req, res) => {
    const user = await User.findOne({ email: email });
 
    if (user && (await user.isValidPassword(password))) {
-      generateToken(res, user._id); // sets cookie
       res.status(200).json({
          _id: user._id,
          name: user.name,
          email: user.email,
          isAdmin: user.isAdmin,
-         token: generateToken(user._id) // <-- add token to response
+         token: generateToken(user._id)
       });
    } else {
       res.status(401);
@@ -43,13 +43,12 @@ const registerUser = asyncHandler(async (req, res) => {
    });
 
    if (user) {
-      generateToken(res, user._id); // sets cookie
       res.status(201).json({
          _id: user._id,
          name: user.name,
          email: user.email,
          isAdmin: user.isAdmin,
-         token: generateToken(user._id) // <-- add token to response
+         token: generateToken(user._id)
       });
    } else {
       res.status(400);
@@ -57,14 +56,10 @@ const registerUser = asyncHandler(async (req, res) => {
    }
 });
 
-// @desc   Logout user/clear cookie
+// @desc   Logout user (no cookie to clear in stateless JWT)
 // @route  POST /api/users/logout
 // @access Private
 const logoutUser = asyncHandler(async (req, res) => {
-   res.cookie('jwt', '', {
-      httpOnly: true,
-      expires: new Date(0)
-   });
    res.status(200).json({ message: 'Logged out successfully' });
 });
 
