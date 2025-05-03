@@ -13,9 +13,10 @@ const protect = asyncHandler(async (req, res, next) => {
    ) {
       token = req.headers.authorization.split(' ')[1];
    }
-
-   // Read the JWT from the 'jwt' cookie
-   token = req.cookies.jwt;
+   // OPTIONAL: fallback to cookie if you want to support both
+   // else if (req.cookies && req.cookies.jwt) {
+   //    token = req.cookies.jwt;
+   // }
 
    if (token) {
       try {
@@ -33,7 +34,6 @@ const protect = asyncHandler(async (req, res, next) => {
    }
 });
 
-// Admin middleware
 const admin = (req, res, next) => {
    if (req.user && req.user.isAdmin) {
       next();
