@@ -11,6 +11,7 @@ import {
    useCreateProductMutation, 
    useDeleteProductMutation 
 } from "../../slices/productsApiSlice";
+import './ProductListScreen.css';
 
 const ProductListScreen = () => {
 
@@ -52,10 +53,10 @@ const ProductListScreen = () => {
 
 
    return (
-      <>
+      <div className="productlist-container">
          <Row className="align-items-center">
             <Col>
-               <h1>Products</h1>
+               <h1 className="productlist-title">Products</h1>
             </Col>
             <Col className="text-end">
                <Button className="btn-sm m-3" onClick={createProductHandler}>
@@ -72,7 +73,7 @@ const ProductListScreen = () => {
                <Message variant="danger">{error.data.message}</Message>
             ) : (
                <>
-                  <Table striped="true" hover responsive className="table-sm">
+                  <Table striped hover responsive className="table-sm">
                      <thead>
                         <tr>
                            <th>ID</th>
@@ -113,7 +114,7 @@ const ProductListScreen = () => {
                </>
             )
          )}
-      </>
+      </div>
    );
 }
 

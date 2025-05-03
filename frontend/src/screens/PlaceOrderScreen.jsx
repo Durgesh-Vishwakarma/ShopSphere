@@ -8,7 +8,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useCreateOrderMutation } from '../slices/ordersApiSlice';
 import { clearCart } from '../slices/cartSlice';
-
+import './PlaceOrderScreen.css';
 
 const PlaceOrderScreen = () => {
 
@@ -61,7 +61,7 @@ const PlaceOrderScreen = () => {
    return (
       <>
          <CheckoutSteps step1 step2 step3 step4 />
-         <Row>
+         <Row className="placeorder-main-row">
 
             <Col md={8}>
                <ListGroup variant='flush'>
@@ -85,7 +85,7 @@ const PlaceOrderScreen = () => {
                      {cart.cartItems.length === 0 ? (
                         <Message>Your cart is empty</Message>
                      ) : (
-                        <ListGroup variant='flush'>
+                        <ListGroup variant='flush' className="placeorder-items-list">
                            {cart.cartItems.map((item, index) => (
                               <ListGroup.Item key={index}>
                                  <Row>
@@ -111,11 +111,11 @@ const PlaceOrderScreen = () => {
             </Col>
 
             <Col md={4}>
-               <Card>
+               <Card className="placeorder-summary-card">
                   <ListGroup variant='flush'>
 
                      <ListGroup.Item>
-                        <h2>Order Summary</h2>
+                        <h2 className="placeorder-summary-title">Order Summary</h2>
                      </ListGroup.Item>
 
                      <ListGroup.Item>
@@ -142,13 +142,9 @@ const PlaceOrderScreen = () => {
                      <ListGroup.Item>
                         <Row>
                            <Col>Total: </Col>
-                           <Col>${cart.totalPrice}</Col>
+                           <Col className="placeorder-summary-total">${cart.totalPrice}</Col>
                         </Row>
                      </ListGroup.Item>
-
-                     {/* <ListGroup.Item>
-                        {error && <Message variant='danger'>{error}</Message>}
-                     </ListGroup.Item> */}
 
                      {error && (
                         <ListGroup.Item>

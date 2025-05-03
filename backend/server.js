@@ -20,6 +20,7 @@ const PORT = process.env.PORT || 5000;
 // ✅ CORS configuration
 const allowedOrigins = [
   'https://shop-sphere-kohl.vercel.app',
+  'http://localhost:3000',
   'https://shop-sphere-git-main-durgesh-vishwakarmas-projects.vercel.app',
 ];
 

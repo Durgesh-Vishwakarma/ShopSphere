@@ -1,16 +1,17 @@
 import { Container, Row, Col } from 'react-bootstrap';
-
+import './Footer.css';
 
 const Footer = () => {
-
    const currentYear = new Date().getFullYear();
 
    return (
-      <footer>
+      <footer className="footer-advanced">
          <Container>
             <Row>
                <Col className='text-center py-3'>
-                  <p>ShopSphere &copy; {currentYear}</p>
+                  <p className="footer-text">
+                     <span className="footer-logo">🛒 ShopSphere</span> &copy; {currentYear}
+                  </p>
                </Col>
             </Row>
          </Container>

@@ -1,0 +1,23 @@
+.loader-outer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+  }
+  
+  .loader-spinner {
+    width: 64px;
+    height: 64px;
+    border: 6px solid #e0e7ef;
+    border-top: 6px solid #ff9800;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    background: transparent;
+    margin: auto;
+    box-shadow: 0 2px 12px rgba(255,152,0,0.10);
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+  }

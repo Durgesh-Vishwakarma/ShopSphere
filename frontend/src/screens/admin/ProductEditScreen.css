@@ -1,0 +1,70 @@
+.product-edit-container {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+    padding: 2.5rem 2rem 2rem 2rem;
+    max-width: 520px;
+    margin: 0rem auto;
+  }
+  
+  .product-edit-container h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #232526;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+  
+  .product-edit-container .form-label {
+    font-weight: 700 !important;
+    color: #232526 !important;
+    letter-spacing: 0.5px;
+  }
+  
+  .product-edit-container .form-control {
+    border-radius: 10px !important;
+    border: 1.5px solid #e0e7ef !important;
+    padding: 0.8rem 1.1rem !important;
+    font-size: 1.08rem !important;
+    background: #f8fafc !important;
+    margin-bottom: 0.7rem !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(31,38,135,0.04);
+  }
+  
+  .product-edit-container .form-control:focus {
+    border-color: #ff9800 !important;
+    box-shadow: 0 0 0 2px rgba(255,152,0,0.13) !important;
+  }
+  
+  .product-edit-container .btn-primary {
+    background: linear-gradient(90deg, #232526 0%, #ff9800 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 800 !important;
+    width: 100% !important;
+    padding: 0.8rem 0 !important;
+    font-size: 1.13rem !important;
+    margin-top: 1rem !important;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(31,38,135,0.08);
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+  }
+  
+  .product-edit-container .btn-primary:hover,
+  .product-edit-container .btn-primary:focus {
+    background: linear-gradient(90deg, #ff9800 0%, #232526 100%) !important;
+    color: #fff !important;
+    transform: translateY(-2px) scale(1.03);
+  }
+  
+  @media (max-width: 600px) {
+    .product-edit-container {
+      padding: 1.2rem 0.5rem;
+      max-width: 100%;
+    }
+    .product-edit-container h1 {
+      font-size: 1.3rem;
+    }
+  }

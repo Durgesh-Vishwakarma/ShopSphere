@@ -4,7 +4,7 @@ import { FaTimes } from "react-icons/fa";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetOrdersQuery } from "../../slices/ordersApiSlice";
-
+import './OrderListScreen.css';
 
 const OrderListScreen = () => {
 
@@ -12,12 +12,12 @@ const OrderListScreen = () => {
    // console.log(orders);
 
    return (
-      <>
-      <h1>Orders</h1>
+      <div className="orderlist-container">
+         <h1 className="orderlist-title">Orders</h1>
          {isLoading ? (<Loader />) : (error ? (
             <Message variant='danger'>{error}</Message>
          ) : (
-            <Table stripped="true" hover responsive className="table-sm">
+            <Table striped hover responsive className="table-sm">
                <thead>
                   <tr>
                      <th>ID</th>
@@ -60,10 +60,8 @@ const OrderListScreen = () => {
                </tbody>
             </Table>
          ))}
-      </>
+      </div>
    )
 };
 
 export default OrderListScreen;
-
-// Implement delete order

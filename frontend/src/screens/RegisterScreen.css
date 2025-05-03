@@ -1,0 +1,164 @@
+/* Outer split layout */
+.register-outer {
+  min-height: 100vh;
+  width: 90vw;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background: #f8fafc;
+  overflow-x: hidden;
+  /* background-color: blue; */
+}
+
+/* Left illustration panel */
+.register-illustration {
+  flex: 1.6;
+  background: linear-gradient(135deg, #ffe259 0%, #ffa751 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 320px;
+  max-width: 600px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.register-illustration img {
+  width: 80%;
+  max-width: 400px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+@media (max-width: 900px) {
+  .register-illustration {
+    display: none;
+  }
+}
+
+/* Right form panel */
+.register-form-panel {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  min-width: 340px;
+  padding: 0;
+}
+
+.register-form-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 32px 0 rgba(31, 38, 135, 0.13);
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  margin: 2.5rem 2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.register-form-container h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #232526;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  letter-spacing: 1px;
+}
+
+.register-form-container .register-welcome {
+  color: #ff9800;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  text-align: left;
+}
+
+.register-form-container .register-desc {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.register-form-container .form-label {
+  font-weight: 600 !important;
+  color: #232526 !important;
+  letter-spacing: 0.5px;
+}
+
+.register-form-container .form-control {
+  border-radius: 8px !important;
+  border: 1.5px solid #e0e7ef !important;
+  padding: 0.7rem 1rem !important;
+  font-size: 1.05rem !important;
+  background: #f8fafc !important;
+  margin-bottom: 1rem !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.register-form-container .form-control:focus {
+  border-color: #ff9800 !important;
+  box-shadow: 0 0 0 2px rgba(255,152,0,0.13) !important;
+}
+
+.register-form-container .btn-primary {
+  background: #ffb300 !important;
+  color: #232526 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  width: 100% !important;
+  padding: 0.8rem 0 !important;
+  font-size: 1.13rem !important;
+  margin-top: 0.5rem !important;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(255,152,0,0.08);
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.register-form-container .btn-primary:hover,
+.register-form-container .btn-primary:focus {
+  background: #ff9800 !important;
+  color: #fff !important;
+  transform: translateY(-2px) scale(1.03);
+}
+
+.register-form-container .py-3 {
+  margin-top: 1.2rem !important;
+  text-align: center;
+}
+
+.register-form-container a {
+  color: #ff9800;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.register-form-container a:hover {
+  color: #232526;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .register-form-panel {
+    min-width: 0;
+    padding: 0;
+  }
+  .register-form-container {
+    margin: 1rem 0.2rem;
+    padding: 1.2rem 0.5rem;
+    max-width: 100%;
+  }
+  .register-form-container h1 {
+    font-size: 1.2rem;
+  }
+}

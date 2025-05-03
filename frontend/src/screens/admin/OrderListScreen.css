@@ -1,0 +1,68 @@
+.orderlist-container {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .orderlist-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #232526;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+  
+  .table-sm {
+    background: #f8fafc;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(31,38,135,0.08);
+  }
+  
+  .table-sm th, .table-sm td {
+    vertical-align: middle !important;
+    text-align: center;
+    font-size: 1rem;
+  }
+  
+  .table-sm th {
+    background: #f3f4f6;
+    color: #232526;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #ececec;
+  }
+  
+  .table-sm tr {
+    transition: background 0.15s;
+  }
+  
+  .table-sm tbody tr:hover {
+    background: #fffbe7;
+  }
+  
+  .btn-sm {
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    padding: 0.3rem 0.8rem !important;
+    background: #232526 !important;
+    color: #fff !important;
+    border: none !important;
+    transition: background 0.2s;
+  }
+  
+  .btn-sm:hover, .btn-sm:focus {
+    background: #ff9800 !important;
+    color: #232526 !important;
+  }
+  
+  @media (max-width: 768px) {
+    .orderlist-container {
+      padding: 1rem 0.5rem;
+    }
+    .orderlist-title {
+      font-size: 1.2rem;
+    }
+  }

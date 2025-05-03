@@ -3,10 +3,9 @@ import { Carousel, Image } from "react-bootstrap";
 import Loader from "./Loader";
 import Message from "./Message";
 import { useGetTopProductsQuery } from "../slices/productsApiSlice";
-import Ratio from 'react-bootstrap/Ratio';
+import './ProductCarousel.css';
 
 const ProductCarousel = () => {
-
    const { data: products, isLoading, error } = useGetTopProductsQuery();
 
    return (
@@ -16,21 +15,22 @@ const ProductCarousel = () => {
               {error.data?.message || error.error || error.status || "Something went wrong"}
             </Message>
          ) : (
-            <Carousel pause='hover' className="bg-primary mb-4">
-               {products.map(product => (
+            <div className="carousel-wrapper">
+              <Carousel pause='hover' className="product-carousel" indicators={false}>
+                {products.map(product => (
                   <Carousel.Item key={product._id}>
-                     <Link to={`/product/${product._id}`}>
-                     <Ratio aspectRatio="21x9">
-                     <Image src={product.image} alt={product.name} fluid />
-                     </Ratio>
-                        
-                        <Carousel.Caption className="carousel-caption">
-                           <h2>{product.name} (${product.price})</h2>
-                        </Carousel.Caption>
-                     </Link>
+                    <Link to={`/product/${product._id}`}>
+                      <Image src={product.image} alt={product.name} className="carousel-image" />
+                      <Carousel.Caption className="carousel-caption-custom">
+                        <h2>
+                          {product.name} <span className="carousel-price">(${product.price})</span>
+                        </h2>
+                      </Carousel.Caption>
+                    </Link>
                   </Carousel.Item>
-               ))}
-            </Carousel>
+                ))}
+              </Carousel>
+            </div>
          )
       )
    )

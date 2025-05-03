@@ -10,7 +10,7 @@ import {
    useGetProductDetailsQuery, 
    useUploadProductImageMutation 
 } from '../../slices/productsApiSlice';
-
+import './ProductEditScreen.css';
 
 const ProductEditScreen = () => {
 
@@ -97,97 +97,99 @@ const ProductEditScreen = () => {
          </Link>
 
          <FormContainer>
-            <h1>Edit Product</h1>
-            {updateLoading && <Loader />}
+            <div className="product-edit-container">
+               <h1>Edit Product</h1>
+               {updateLoading && <Loader />}
 
-            {isLoading ? <Loader /> : (
-               error ? (
-                  <Message variant='danger'>{error.data.message}</Message>
-               ) : (
-                  <Form onSubmit={formSubmitHandler}>
-                     <Form.Group controlId='name' className='my-2'>
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control 
-                           type='text'
-                           placeholder='Enter Name'
-                           value={name}
-                           onChange={event => setName(event.target.value)} 
-                        />
-                     </Form.Group>
+               {isLoading ? <Loader /> : (
+                  error ? (
+                     <Message variant='danger'>{error.data.message}</Message>
+                  ) : (
+                     <Form onSubmit={formSubmitHandler}>
+                        <Form.Group controlId='name' className='my-2'>
+                           <Form.Label>Name</Form.Label>
+                           <Form.Control 
+                              type='text'
+                              placeholder='Enter Name'
+                              value={name}
+                              onChange={event => setName(event.target.value)} 
+                           />
+                        </Form.Group>
 
-                     <Form.Group controlId='price' className='my-2'>
-                        <Form.Label>Price</Form.Label>
-                        <Form.Control 
-                           type='number'
-                           placeholder='Enter Price'
-                           value={price}
-                           onChange={event => setPrice(event.target.value)} 
-                        />
-                     </Form.Group>
+                        <Form.Group controlId='price' className='my-2'>
+                           <Form.Label>Price</Form.Label>
+                           <Form.Control 
+                              type='number'
+                              placeholder='Enter Price'
+                              value={price}
+                              onChange={event => setPrice(event.target.value)} 
+                           />
+                        </Form.Group>
 
-                     <Form.Group controlId='image' className='my-2'>
-                        <Form.Label>Image</Form.Label>
-                        <Form.Control 
-                           type='text' 
-                           placeholder='Enter image URL' 
-                           value={image}
-                           onChange={(event) => setImage(event.target.value)} // ✅ Correct
+                        <Form.Group controlId='image' className='my-2'>
+                           <Form.Label>Image</Form.Label>
+                           <Form.Control 
+                              type='text' 
+                              placeholder='Enter image URL' 
+                              value={image}
+                              onChange={(event) => setImage(event.target.value)} // ✅ Correct
 
-                        />
-                        <Form.Control 
-                           type='file'
-                           label='Choose an image'
-                           onChange={uploadFileHandler}
-                        />
-                     </Form.Group>
-                     {uploadLoading && <Loader />}
+                           />
+                           <Form.Control 
+                              type='file'
+                              label='Choose an image'
+                              onChange={uploadFileHandler}
+                           />
+                        </Form.Group>
+                        {uploadLoading && <Loader />}
 
-                     <Form.Group controlId='brand' className='my-2'>
-                        <Form.Label>Brand</Form.Label>
-                        <Form.Control 
-                           type='text'
-                           placeholder='Enter Brand'
-                           value={brand}
-                           onChange={event => setBrand(event.target.value)} 
-                        />
-                     </Form.Group>
+                        <Form.Group controlId='brand' className='my-2'>
+                           <Form.Label>Brand</Form.Label>
+                           <Form.Control 
+                              type='text'
+                              placeholder='Enter Brand'
+                              value={brand}
+                              onChange={event => setBrand(event.target.value)} 
+                           />
+                        </Form.Group>
 
-                     <Form.Group controlId='category' className='my-2'>
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control 
-                           type='text'
-                           placeholder='Enter Category'
-                           value={category}
-                           onChange={event => setCategory(event.target.value)} 
-                        />
-                     </Form.Group>
+                        <Form.Group controlId='category' className='my-2'>
+                           <Form.Label>Category</Form.Label>
+                           <Form.Control 
+                              type='text'
+                              placeholder='Enter Category'
+                              value={category}
+                              onChange={event => setCategory(event.target.value)} 
+                           />
+                        </Form.Group>
 
-                     <Form.Group controlId='countInStock' className='my-2'>
-                        <Form.Label>Count in Stock</Form.Label>
-                        <Form.Control 
-                           type='number'
-                           placeholder='Enter count in stock'
-                           value={countInStock}
-                           onChange={event => setCountInStock(event.target.value)} 
-                        />
-                     </Form.Group>
+                        <Form.Group controlId='countInStock' className='my-2'>
+                           <Form.Label>Count in Stock</Form.Label>
+                           <Form.Control 
+                              type='number'
+                              placeholder='Enter count in stock'
+                              value={countInStock}
+                              onChange={event => setCountInStock(event.target.value)} 
+                           />
+                        </Form.Group>
 
-                     <Form.Group controlId='description' className='my-2'>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control 
-                           type='text'
-                           placeholder='Enter Description'
-                           value={description}
-                           onChange={event => setDescription(event.target.value)} 
-                        />
-                     </Form.Group>
+                        <Form.Group controlId='description' className='my-2'>
+                           <Form.Label>Description</Form.Label>
+                           <Form.Control 
+                              type='text'
+                              placeholder='Enter Description'
+                              value={description}
+                              onChange={event => setDescription(event.target.value)} 
+                           />
+                        </Form.Group>
 
-                     <Button type='submit' variant='primary' className='my-2'>
-                        Update
-                     </Button>
-                  </Form>
-               )
-            )}
+                        <Button type='submit' variant='primary' className='my-2'>
+                           Update
+                        </Button>
+                     </Form>
+                  )
+               )}
+            </div>
          </FormContainer>
       </>
    )

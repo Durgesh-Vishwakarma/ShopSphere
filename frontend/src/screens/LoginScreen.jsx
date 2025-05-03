@@ -2,15 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
-
+import './RegisterScreen.css'; // Reuse the same CSS as RegisterScreen
 
 const LoginScreen = () => {
-
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
 
@@ -25,7 +23,6 @@ const LoginScreen = () => {
    const searchParams = new URLSearchParams(search);
    const redirect = searchParams.get('redirect') || '/';
 
-
    useEffect(() => {
       if (userInfo) {
          navigate(redirect);
@@ -34,7 +31,6 @@ const LoginScreen = () => {
 
    const formSubmitHandler = async event => {
       event.preventDefault();
-      
       try {
          const responseData = await login({ email, password }).unwrap();
          dispatch(setCredentials({ ...responseData }));
@@ -45,48 +41,53 @@ const LoginScreen = () => {
       }
    };
 
-
    return (
-      <FormContainer>
-         <h1>Sign In</h1>
-
-         <Form onSubmit={formSubmitHandler}>
-
-            <Form.Group controlId="email" className="my-3">
-               <Form.Label>Email Address</Form.Label>
-               <Form.Control
-                  type="email"
-                  placeholder="Enter Email"
-                  value={email}
-                  onChange={event => setEmail(event.target.value)}
-               ></Form.Control>
-            </Form.Group>
-   
-            <Form.Group controlId="password" className="my-3">
-               <Form.Label>Password</Form.Label>
-               <Form.Control
-                  type="password"
-                  placeholder="Enter Password"
-                  value={password}
-                  onChange={event => setPassword(event.target.value)}
-               ></Form.Control>
-            </Form.Group>
-            
-            <Button type="submit" variant="primary" className="mt-2" disabled={isLoading}>
-               Sign In
-            </Button>
-
-            {isLoading && <Loader />}
-         </Form>
-
-         <Row className="py-3">
-            <Col>
-               New Customer? <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}>
-                  Register Now
-               </Link>
-            </Col>
-         </Row>
-      </FormContainer>
+      <div className="register-outer">
+         <div className="register-illustration">
+            {/* Use your own SVG/PNG illustration here */}
+            <img src="/images/register-illustration.jpg" alt="Welcome" />
+         </div>
+         <div className="register-form-panel">
+            <div className="register-form-container">
+               <div className="register-welcome">Welcome Back!</div>
+               <div className="register-desc">
+                  Sign in to continue your shopping journey.
+               </div>
+               <h1>Sign In</h1>
+               <Form onSubmit={formSubmitHandler}>
+                  <Form.Group controlId="email" className="my-2">
+                     <Form.Label>Email Address</Form.Label>
+                     <Form.Control
+                        type="email"
+                        placeholder="Enter Email"
+                        value={email}
+                        onChange={event => setEmail(event.target.value)}
+                     />
+                  </Form.Group>
+                  <Form.Group controlId="password" className="my-2">
+                     <Form.Label>Password</Form.Label>
+                     <Form.Control
+                        type="password"
+                        placeholder="Enter Password"
+                        value={password}
+                        onChange={event => setPassword(event.target.value)}
+                     />
+                  </Form.Group>
+                  <Button type="submit" variant="primary" className="mt-2" disabled={isLoading}>
+                     Sign In
+                  </Button>
+                  {isLoading && <Loader className="loader" />}
+               </Form>
+               <Row className="py-3">
+                  <Col>
+                     New Customer? <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}>
+                        Register Now
+                     </Link>
+                  </Col>
+               </Row>
+            </div>
+         </div>
+      </div>
    )
 };
 

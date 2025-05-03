@@ -1,0 +1,110 @@
+.profile-main-row {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+    margin-bottom: 2rem;
+    padding: 2rem 1.5rem;
+    align-items: stretch;
+  }
+  
+  .profile-form-card {
+    background: #f8fafc;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(31,38,135,0.08);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-form-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #232526;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .profile-form-card .form-label {
+    font-weight: 600 !important;
+    color: #232526 !important;
+  }
+  
+  .profile-form-card .form-control {
+    border-radius: 8px !important;
+    border: 1px solid #e0e7ef !important;
+    padding: 0.7rem 1rem !important;
+    font-size: 1.05rem !important;
+    background: #fff !important;
+    margin-bottom: 0.5rem !important;
+    transition: border-color 0.2s;
+  }
+  
+  .profile-form-card .form-control:focus {
+    border-color: #ff9800 !important;
+    box-shadow: 0 0 0 2px rgba(255,152,0,0.15) !important;
+  }
+  
+  .profile-form-card .btn-primary {
+    background: #232526 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+    padding: 0.7rem 0 !important;
+    font-size: 1.1rem !important;
+    margin-top: 1rem !important;
+    transition: background 0.2s;
+  }
+  
+  .profile-form-card .btn-primary:hover,
+  .profile-form-card .btn-primary:focus {
+    background: #ff9800 !important;
+    color: #232526 !important;
+  }
+  
+  .profile-orders-card {
+    background: #f8fafc;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(31,38,135,0.08);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+  }
+  
+  .profile-orders-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #232526;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .table-sm {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(31,38,135,0.06);
+  }
+  
+  .table-sm th, .table-sm td {
+    vertical-align: middle !important;
+    text-align: center;
+  }
+  
+  .btn-sm {
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    padding: 0.3rem 0.8rem !important;
+    background: #232526 !important;
+    color: #fff !important;
+    border: none !important;
+    transition: background 0.2s;
+  }
+  
+  .btn-sm:hover, .btn-sm:focus {
+    background: #ff9800 !important;
+    color: #232526 !important;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-main-row, .profile-form-card, .profile-orders-card {
+      padding: 1rem 0.5rem;
+    }
+  }

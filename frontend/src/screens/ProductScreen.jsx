@@ -9,7 +9,7 @@ import Message from "../components/Message";
 import Meta from "../components/Meta";
 import { useGetProductDetailsQuery, useCreateReviewMutation } from "../slices/productsApiSlice";
 import { addToCart } from "../slices/cartSlice";
-
+import './ProductScreen.css';
 
 const ProductScreen = () => {
 
@@ -61,12 +61,12 @@ const ProductScreen = () => {
             ) : (
                <>
                   <Meta title={product.name} description={product.description} />
-                  <Row>
-                     <Col md={5}>
-                        <Image src={product.image} alt={product.name} fluid />
+                  <Row className="product-details-row">
+                     <Col md={5} className="product-image-col">
+                        <Image src={product.image} alt={product.name} fluid className="product-image" />
                      </Col>
                      <Col md={4}>
-                        <ListGroup variant="flush">
+                        <ListGroup variant="flush" className="product-info-list">
                            <ListGroup.Item>
                               <h3>{product.name}</h3>
                            </ListGroup.Item>
@@ -78,7 +78,7 @@ const ProductScreen = () => {
                         </ListGroup>
                      </Col>
                      <Col md={3}>
-                        <Card>
+                        <Card className="product-card-summary">
                            <ListGroup variant="flush">
                               <ListGroup.Item>
                                  <Row>

@@ -7,7 +7,7 @@ import Loader from "../components/Loader";
 import { useRegisterMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
-
+import './RegisterScreen.css';
 
 const RegisterScreen = () => {
 
@@ -57,66 +57,70 @@ const RegisterScreen = () => {
 
 
    return (
-      <FormContainer>
-         <h1>Sign Up</h1>
-
-         <Form onSubmit={formSubmitHandler}>
-
-         <Form.Group controlId="name" className="my-3">
-               <Form.Label>Name</Form.Label>
-               <Form.Control
-                  type="text"
-                  placeholder="Enter Name"
-                  value={name}
-                  onChange={event => setName(event.target.value)}
-               ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="email" className="my-3">
-               <Form.Label>Email Address</Form.Label>
-               <Form.Control
-                  type="email"
-                  placeholder="Enter Email"
-                  value={email}
-                  onChange={event => setEmail(event.target.value)}
-               ></Form.Control>
-            </Form.Group>
-   
-            <Form.Group controlId="password" className="my-3">
-               <Form.Label>Password</Form.Label>
-               <Form.Control
-                  type="password"
-                  placeholder="Enter Password"
-                  value={password}
-                  onChange={event => setPassword(event.target.value)}
-               ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="confirmPassword" className="my-3">
-               <Form.Label> Confirm Password</Form.Label>
-               <Form.Control
-                  type="password"
-                  placeholder="Enter Password again"
-                  value={confirmPassword}
-                  onChange={event => setConfirmPassword(event.target.value)}
-               ></Form.Control>
-            </Form.Group>
-            
-            <Button type="submit" variant="primary" className="mt-2" disabled={isLoading}>
-               Register
-            </Button>
-
-            {isLoading && <Loader />}
-         </Form>
-
-         <Row className="py-3">
-            <Col>
-               Already Registered? <Link to={redirect ? `/auth?redirect=${redirect}` : `/auth`}>
-                  Log In
-               </Link>
-            </Col>
-         </Row>
-      </FormContainer>
+      <div className="register-outer">
+         <div className="register-illustration">
+            {/* Use your own SVG/PNG illustration here */}
+            <img src="/images/register-illustration.jpg" alt="Welcome" />
+         </div>
+         <div className="register-form-panel">
+            <div className="register-form-container">
+               <div className="register-welcome">Welcome to ShopSphere!</div>
+               <div className="register-desc">
+                  Join our community and start your shopping journey.
+               </div>
+               <h1>Create Account</h1>
+               <Form onSubmit={formSubmitHandler}>
+                  <Form.Group controlId="name" className="my-2">
+                     <Form.Label>Name</Form.Label>
+                     <Form.Control
+                        type="text"
+                        placeholder="Enter Name"
+                        value={name}
+                        onChange={event => setName(event.target.value)}
+                     />
+                  </Form.Group>
+                  <Form.Group controlId="email" className="my-2">
+                     <Form.Label>Email Address</Form.Label>
+                     <Form.Control
+                        type="email"
+                        placeholder="Enter Email"
+                        value={email}
+                        onChange={event => setEmail(event.target.value)}
+                     />
+                  </Form.Group>
+                  <Form.Group controlId="password" className="my-2">
+                     <Form.Label>Password</Form.Label>
+                     <Form.Control
+                        type="password"
+                        placeholder="Enter Password"
+                        value={password}
+                        onChange={event => setPassword(event.target.value)}
+                     />
+                  </Form.Group>
+                  <Form.Group controlId="confirmPassword" className="my-2">
+                     <Form.Label>Confirm Password</Form.Label>
+                     <Form.Control
+                        type="password"
+                        placeholder="Enter Password again"
+                        value={confirmPassword}
+                        onChange={event => setConfirmPassword(event.target.value)}
+                     />
+                  </Form.Group>
+                  <Button type="submit" variant="primary" className="mt-2" disabled={isLoading}>
+                     Register
+                  </Button>
+                  {isLoading && <Loader className="loader" />}
+               </Form>
+               <Row className="py-3">
+                  <Col>
+                     Already have an account? <Link to={redirect ? `/auth?redirect=${redirect}` : `/auth`}>
+                        Log In
+                     </Link>
+                  </Col>
+               </Row>
+            </div>
+         </div>
+      </div>
    )
 };
 

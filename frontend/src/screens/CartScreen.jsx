@@ -4,7 +4,7 @@ import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import { FaTrash } from 'react-icons/fa';
 import { addToCart, removeFromCart } from "../slices/cartSlice";
 import Message from "../components/Message";
-
+import './CartScreen.css';
 
 const CartScreen = () => {
 
@@ -30,7 +30,7 @@ const CartScreen = () => {
 
 
    return (
-      <Row>
+      <Row className="cart-main-row">
          <Col md={8}>
             <h1 style={{ marginBottom: '20px' }}>Shopping Cart</h1>
             {cartItems.length === 0 ? (
@@ -44,33 +44,35 @@ const CartScreen = () => {
                <ListGroup variant="flush">
                   {cartItems.map(item => (
                      <ListGroup.Item key={item._id}>
-                        <Row>
+                        <Row className="cart-item-row">
                            <Col md={2}>
-                              <Image src={item.image} alt={item.name} fluid rounded />
+                              <Image src={item.image} alt={item.name} fluid rounded className="cart-item-image" />
                            </Col>
                            <Col md={3}>
-                              <Link to={`/product/${item._id}`}>{item.name}</Link>
+                              <Link to={`/product/${item._id}`} className="cart-item-link">{item.name}</Link>
                            </Col>
-                           <Col md={2}>${item.price}</Col>
+                           <Col md={2} className="cart-item-price">${item.price}</Col>
                            <Col md={2}>
-                           <Form.Control 
-                              as='select' 
-                              value={item.qty} 
-                              onChange={event => 
-                                 addToCartHandler(item, Number(event.target.value))
-                              }
-                           >
-                              {[...Array(item.countInStock).keys()].map(idx => (
-                                 <option key={idx + 1} value={idx + 1}>
-                                    {idx + 1}
-                                 </option>
-                              ))}
-                           </Form.Control>
+                              <Form.Control 
+                                 as='select' 
+                                 value={item.qty} 
+                                 className="cart-item-select"
+                                 onChange={event => 
+                                    addToCartHandler(item, Number(event.target.value))
+                                 }
+                              >
+                                 {[...Array(item.countInStock).keys()].map(idx => (
+                                    <option key={idx + 1} value={idx + 1}>
+                                       {idx + 1}
+                                    </option>
+                                 ))}
+                              </Form.Control>
                            </Col>
                            <Col md={2}>
                               <Button 
                                  type="button" 
                                  variant="light" 
+                                 className="cart-item-remove-btn"
                                  onClick={() => removeFromCartHandler(item._id)}
                               >
                                  <FaTrash /> 
@@ -83,13 +85,15 @@ const CartScreen = () => {
             )}
          </Col>
          <Col md={4}>
-            <Card>
+            <Card className="cart-summary-card">
                <ListGroup variant="flush">
                   <ListGroup.Item>
-                     <h2>
+                     <h2 className="cart-summary-title">
                         Subtotal: ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) items
                      </h2>
-                     ${cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0).toFixed(2)}
+                     <div className="cart-summary-total">
+                        ${cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0).toFixed(2)}
+                     </div>
                   </ListGroup.Item>
                   <ListGroup.Item className="center">
                      <Button 

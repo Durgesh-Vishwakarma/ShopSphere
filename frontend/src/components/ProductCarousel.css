@@ -1,0 +1,55 @@
+.carousel-wrapper {
+  width: 99vw;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  background: #f8fafc;
+  padding: 0;
+  overflow: hidden;
+}
+
+.product-carousel {
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+  background: #fff;
+}
+
+.carousel-image {
+  width: 100vw;
+  max-width: 100vw;
+  height: 400px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  margin: 0 auto;
+  border-radius: 0;
+  background: #f8fafc;
+}
+
+.carousel-caption-custom {
+  background: rgba(0,0,0,0.55);
+  border-radius: 8px;
+  padding: 0.5rem 2rem;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 90vw;
+}
+
+.carousel-caption-custom h2 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 1px 1px 8px #000;
+}
+
+.carousel-price {
+  color: #ffd700;
+  font-size: 1.3rem;
+  font-weight: 500;
+}

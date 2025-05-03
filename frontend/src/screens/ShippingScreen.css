@@ -1,0 +1,79 @@
+.shipping-form-container {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.shipping-form-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #232526;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Make selectors more specific */
+.shipping-form-container .form-label {
+  font-weight: 600 !important;
+  color: #232526 !important;
+  margin-bottom: 0.3rem;
+}
+
+.shipping-form-container .form-control {
+  border-radius: 8px !important;
+  border: 1px solid #e0e7ef !important;
+  padding: 0.7rem 1rem !important;
+  font-size: 1.05rem !important;
+  background: #f8fafc !important;
+  margin-bottom: 0.5rem !important;
+  transition: border-color 0.2s;
+}
+
+.shipping-form-container .form-control:focus {
+  border-color: #ff9800 !important;
+  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.15) !important;
+}
+
+.shipping-form-container .btn-primary {
+  background: #232526 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  width: 100% !important;
+  padding: 0.7rem 0 !important;
+  font-size: 1.1rem !important;
+  margin-top: 1rem !important;
+  transition: background 0.2s;
+}
+
+.shipping-form-container .btn-primary:hover,
+.shipping-form-container .btn-primary:focus {
+  background: #ff9800 !important;
+  color: #232526 !important;
+}
+
+.shipping-form-outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 576px) {
+  .shipping-form-container {
+    padding: 1.2rem 0.5rem;
+    max-width: 100%;
+  }
+  .shipping-form-container h1 {
+    font-size: 1.3rem;
+  }
+}

@@ -1,6 +1,6 @@
 import { Pagination } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-
+import './Paginate.css';
 
 const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
    return (
