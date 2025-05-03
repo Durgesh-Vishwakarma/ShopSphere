@@ -2,11 +2,17 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "./asyncHandler.js";
 import User from "../models/userModel.js";
 
-
 // Protect routes
 const protect = asyncHandler(async (req, res, next) => {
-
    let token;
+
+   // Check for token in Authorization header
+   if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer ')
+   ) {
+      token = req.headers.authorization.split(' ')[1];
+   }
 
    // Read the JWT from the 'jwt' cookie
    token = req.cookies.jwt;
@@ -18,26 +24,20 @@ const protect = asyncHandler(async (req, res, next) => {
          next();
       } catch (error) {
          console.error(error);
-         req.status(401);
+         res.status(401);
          throw new Error('Not authorised, token failed');
       }
-   }
-
-   else {
+   } else {
       res.status(401);
       throw new Error('Not authorised, no token');
    }
 });
 
-
 // Admin middleware
 const admin = (req, res, next) => {
-
    if (req.user && req.user.isAdmin) {
       next();
-   }
-
-   else {
+   } else {
       res.status(401);
       throw new Error('Not authorised as admin');
    }
