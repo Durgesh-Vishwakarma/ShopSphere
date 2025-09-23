@@ -154,6 +154,43 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Database status endpoint for debugging
+app.get('/api/debug/db-status', async (req, res) => {
+  try {
+    const User = (await import('./models/userModel.js')).default;
+    const Product = (await import('./models/productModel.js')).default;
+    const Order = (await import('./models/orderModel.js')).default;
+    
+    const productCount = await Product.countDocuments();
+    const userCount = await User.countDocuments();
+    const orderCount = await Order.countDocuments();
+    
+    res.json({
+      status: 'success',
+      database: {
+        connected: mongoose.connection.readyState === 1,
+        host: mongoose.connection.host,
+        name: mongoose.connection.name,
+        collections: {
+          products: productCount,
+          users: userCount,
+          orders: orderCount
+        }
+      },
+      environment: {
+        nodeEnv: process.env.NODE_ENV,
+        mongoUri: process.env.MONGO_URI ? 'SET' : 'NOT_SET',
+        port: process.env.PORT
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+});
+
 // API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
