@@ -9,6 +9,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
 
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -16,6 +17,11 @@ import { generalLimiter, apiLimiter } from './middleware/rateLimitMiddleware.js'
 import { httpLogger } from './utils/logger.js';
 import { specs, swaggerUi } from './config/swagger.js';
 import logger from './utils/logger.js';
+
+// Import models for debug endpoint
+import User from './models/userModel.js';
+import Product from './models/productModel.js';
+import Order from './models/orderModel.js';
 
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -157,13 +163,12 @@ app.get('/health', (req, res) => {
 // Database status endpoint for debugging
 app.get('/api/debug/db-status', async (req, res) => {
   try {
-    const User = (await import('./models/userModel.js')).default;
-    const Product = (await import('./models/productModel.js')).default;
-    const Order = (await import('./models/orderModel.js')).default;
-    
     const productCount = await Product.countDocuments();
     const userCount = await User.countDocuments();
     const orderCount = await Order.countDocuments();
+    
+    // Get first few products for verification
+    const sampleProducts = await Product.find().limit(3).select('name price image');
     
     res.json({
       status: 'success',
@@ -175,18 +180,21 @@ app.get('/api/debug/db-status', async (req, res) => {
           products: productCount,
           users: userCount,
           orders: orderCount
-        }
+        },
+        sampleProducts
       },
       environment: {
         nodeEnv: process.env.NODE_ENV,
         mongoUri: process.env.MONGO_URI ? 'SET' : 'NOT_SET',
-        port: process.env.PORT
+        port: process.env.PORT,
+        paginationLimit: process.env.PAGINATION_LIMIT
       }
     });
   } catch (error) {
     res.status(500).json({
       status: 'error',
-      message: error.message
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 });

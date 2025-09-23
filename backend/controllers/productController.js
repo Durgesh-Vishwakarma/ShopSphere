@@ -6,15 +6,30 @@ import Product from "../models/productModel.js";
 // @route  GET /api/products
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
-   const pageSize = process.env.PAGINATION_LIMIT;
-   const page = Number(req.query.pageNumber) || 1;
+   const pageSize = Number(process.env.PAGINATION_LIMIT) || 12;
+   const page = Number(req.query.page || req.query.pageNumber) || 1;
 
    const keyword = req.query.keyword ? { name: { $regex: req.query.keyword, $options: 'i' } } : {};
 
-   const count = await Product.countDocuments({ ...keyword });
+   console.log('getProducts called with:', { page, pageSize, keyword, query: req.query });
 
-   const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
-   res.json({ products, page, pages: Math.ceil(count / pageSize) });
+   const count = await Product.countDocuments({ ...keyword });
+   console.log('Product count:', count);
+
+   const products = await Product.find({ ...keyword })
+     .limit(pageSize)
+     .skip(pageSize * (page - 1))
+     .populate('user', 'name email');
+
+   console.log('Products found:', products.length);
+
+   res.json({ 
+     products, 
+     page, 
+     pages: Math.ceil(count / pageSize),
+     total: count,
+     pageSize 
+   });
 });
 
 
@@ -152,7 +167,13 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route  GET /api/products/top
 // @access Public
 const getTopProducts = asyncHandler(async (req, res) => {
+   console.log('getTopProducts called');
+   const count = await Product.countDocuments();
+   console.log('Total products in database:', count);
+   
    const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+   console.log('Top products found:', products.length);
+   
    res.status(200).json(products);
 });
 
