@@ -1,32 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
+import { Button } from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
+import { Card } from "../components/ui/Card";
 import { useRegisterMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
-import { toast } from "react-toastify";
-import './RegisterScreen.css';
 
 const RegisterScreen = () => {
-
    const [name, setName] = useState('');
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
    const [confirmPassword, setConfirmPassword] = useState('');
+   const [error, setError] = useState('');
 
    const dispatch = useDispatch();
    const navigate = useNavigate();
 
    const [register, { isLoading }] = useRegisterMutation();
-
    const { userInfo } = useSelector(state => state.auth);
 
    const { search } = useLocation();
    const searchParams = new URLSearchParams(search);
    const redirect = searchParams.get('redirect') || '/';
-
 
    useEffect(() => {
       if (userInfo) {
@@ -34,94 +32,125 @@ const RegisterScreen = () => {
       }
    }, [userInfo, navigate, redirect]);
 
-   const formSubmitHandler = async event => {
+   const formSubmitHandler = async (event) => {
       event.preventDefault();
+      setError('');
 
       if (password !== confirmPassword) {
-         toast.error('Passwords do not match');
+         setError('Passwords do not match');
          return;
       }
 
-      else {
-
-         try {
-            const responseData = await register({ name, email, password }).unwrap();
-            dispatch(setCredentials({ ...responseData }));
-            navigate(redirect);
-            toast.success('Registered successfully')
-         } catch (err) {
-            toast.error(err?.data?.message || err.error);
-         }
+      try {
+         const responseData = await register({ name, email, password }).unwrap();
+         dispatch(setCredentials({ ...responseData }));
+         navigate(redirect);
+      } catch (err) {
+         setError(err?.data?.message || err.error);
       }
    };
 
-
    return (
-      <div className="register-outer">
-         <div className="register-illustration">
-            {/* Use your own SVG/PNG illustration here */}
-            <img src="/images/register-illustration.jpg" alt="Welcome" />
-         </div>
-         <div className="register-form-panel">
-            <div className="register-form-container">
-               <div className="register-welcome">Welcome to ShopSphere!</div>
-               <div className="register-desc">
-                  Join our community and start your shopping journey.
+      <FormContainer>
+         <Card className="p-8 shadow-lg">
+           <div className="text-center mb-8">
+             <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+             <p className="text-gray-600">Join ShopSphere and start your shopping journey</p>
+           </div>
+
+           {error && (
+             <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+               {error}
+             </div>
+           )}
+
+           <form onSubmit={formSubmitHandler} className="space-y-6">
+             <div>
+               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                 Full Name
+               </label>
+               <Input
+                 id="name"
+                 type="text"
+                 placeholder="Enter your full name"
+                 value={name}
+                 onChange={(e) => setName(e.target.value)}
+                 required
+               />
+             </div>
+
+             <div>
+               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                 Email Address
+               </label>
+               <Input
+                 id="email"
+                 type="email"
+                 placeholder="Enter your email"
+                 value={email}
+                 onChange={(e) => setEmail(e.target.value)}
+                 required
+               />
+             </div>
+
+             <div>
+               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                 Password
+               </label>
+               <Input
+                 id="password"
+                 type="password"
+                 placeholder="Enter password"
+                 value={password}
+                 onChange={(e) => setPassword(e.target.value)}
+                 required
+               />
+             </div>
+
+             <div>
+               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                 Confirm Password
+               </label>
+               <Input
+                 id="confirmPassword"
+                 type="password"
+                 placeholder="Confirm your password"
+                 value={confirmPassword}
+                 onChange={(e) => setConfirmPassword(e.target.value)}
+                 required
+               />
+             </div>
+
+             <Button
+               type="submit"
+               disabled={isLoading}
+               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50"
+               size="lg"
+             >
+               {isLoading ? 'Creating Account...' : 'Create Account'}
+             </Button>
+
+             {isLoading && (
+               <div className="flex justify-center">
+                 <Loader />
                </div>
-               <h1>Create Account</h1>
-               <Form onSubmit={formSubmitHandler}>
-                  <Form.Group controlId="name" className="my-2">
-                     <Form.Label>Name</Form.Label>
-                     <Form.Control
-                        type="text"
-                        placeholder="Enter Name"
-                        value={name}
-                        onChange={event => setName(event.target.value)}
-                     />
-                  </Form.Group>
-                  <Form.Group controlId="email" className="my-2">
-                     <Form.Label>Email Address</Form.Label>
-                     <Form.Control
-                        type="email"
-                        placeholder="Enter Email"
-                        value={email}
-                        onChange={event => setEmail(event.target.value)}
-                     />
-                  </Form.Group>
-                  <Form.Group controlId="password" className="my-2">
-                     <Form.Label>Password</Form.Label>
-                     <Form.Control
-                        type="password"
-                        placeholder="Enter Password"
-                        value={password}
-                        onChange={event => setPassword(event.target.value)}
-                     />
-                  </Form.Group>
-                  <Form.Group controlId="confirmPassword" className="my-2">
-                     <Form.Label>Confirm Password</Form.Label>
-                     <Form.Control
-                        type="password"
-                        placeholder="Enter Password again"
-                        value={confirmPassword}
-                        onChange={event => setConfirmPassword(event.target.value)}
-                     />
-                  </Form.Group>
-                  <Button type="submit" variant="primary" className="mt-2" disabled={isLoading}>
-                     Register
-                  </Button>
-                  {isLoading && <Loader className="loader" />}
-               </Form>
-               <Row className="py-3">
-                  <Col>
-                     Already have an account? <Link to={redirect ? `/auth?redirect=${redirect}` : `/auth`}>
-                        Log In
-                     </Link>
-                  </Col>
-               </Row>
-            </div>
-         </div>
-      </div>
-   )
+             )}
+           </form>
+
+           <div className="mt-6 text-center">
+             <p className="text-sm text-gray-600">
+               Already have an account?{' '}
+               <Link
+                 to={redirect ? `/auth?redirect=${redirect}` : `/auth`}
+                 className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+               >
+                 Sign in
+               </Link>
+             </p>
+           </div>
+         </Card>
+      </FormContainer>
+   );
 };
 
 export default RegisterScreen;

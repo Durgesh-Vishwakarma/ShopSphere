@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { Button } from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
+import { Card } from "../components/ui/Card";
 import { saveShippingAddress } from "../slices/cartSlice";
 import './ShippingScreen.css';
 
@@ -26,77 +28,102 @@ const ShippingScreen = () => {
       event.preventDefault();
       
       dispatch(saveShippingAddress({ address, city, state, postalCode, country }));
-      console.log(shippingAddress);
       navigate('/payment');
    };
 
 
    return (
-      <div className="shipping-form-outer">
-         <div className="shipping-form-container">
-            <CheckoutSteps step1 step2 />
+      <FormContainer>
+         <CheckoutSteps step1 step2 />
+         
+         <Card className="p-8 shadow-lg">
+            <div className="text-center mb-8">
+               <h1 className="text-3xl font-bold text-gray-900 mb-2">Shipping Address</h1>
+               <p className="text-gray-600">Enter your delivery information</p>
+            </div>
 
-            <h1>Shipping Address</h1>
-
-            <Form onSubmit={formSubmitHandler}>
-
-               <Form.Group controlId="address" className="my-2">
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control
+            <form onSubmit={formSubmitHandler} className="space-y-6">
+               <div>
+                  <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                     Address
+                  </label>
+                  <Input
+                     id="address"
                      type="text"
-                     placeholder="Enter address"
+                     placeholder="Enter your address"
                      value={address}
-                     onChange={event => setAddress(event.target.value)}
+                     onChange={(e) => setAddress(e.target.value)}
+                     required
                   />
-               </Form.Group>
+               </div>
 
-               <Form.Group controlId="city" className="my-2">
-                  <Form.Label>City</Form.Label>
-                  <Form.Control
+               <div>
+                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                     City
+                  </label>
+                  <Input
+                     id="city"
                      type="text"
                      placeholder="Enter your city"
                      value={city}
-                     onChange={event => setCity(event.target.value)}
+                     onChange={(e) => setCity(e.target.value)}
+                     required
                   />
-               </Form.Group>
+               </div>
 
-               <Form.Group controlId="state" className="my-2">
-                  <Form.Label>State</Form.Label>
-                  <Form.Control
+               <div>
+                  <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+                     State/Province
+                  </label>
+                  <Input
+                     id="state"
                      type="text"
                      placeholder="Enter your state"
                      value={state}
-                     onChange={event => setState(event.target.value)}
+                     onChange={(e) => setState(e.target.value)}
+                     required
                   />
-               </Form.Group>
+               </div>
 
-               <Form.Group controlId="postalCode" className="my-2">
-                  <Form.Label>Postal Code</Form.Label>
-                  <Form.Control
+               <div>
+                  <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">
+                     Postal Code
+                  </label>
+                  <Input
+                     id="postalCode"
                      type="text"
                      placeholder="Enter postal code"
                      value={postalCode}
-                     onChange={event => setPostalCode(event.target.value)}
+                     onChange={(e) => setPostalCode(e.target.value)}
+                     required
                   />
-               </Form.Group>
+               </div>
 
-               <Form.Group controlId="country" className="my-2">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Control
+               <div>
+                  <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+                     Country
+                  </label>
+                  <Input
+                     id="country"
                      type="text"
                      placeholder="Enter your country"
                      value={country}
-                     onChange={event => setCountry(event.target.value)}
+                     onChange={(e) => setCountry(e.target.value)}
+                     required
                   />
-               </Form.Group>
+               </div>
 
-               <Button type="submit" variant="primary" className="my-2">
-                  Continue
+               <Button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+                  size="lg"
+               >
+                  Continue to Payment
                </Button>
-            </Form>
-         </div>
-      </div>
-   )
+            </form>
+         </Card>
+      </FormContainer>
+   );
 }
 
 export default ShippingScreen;

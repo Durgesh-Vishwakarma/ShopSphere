@@ -1,0 +1,6 @@
+{"level":"info","message":"🚀 Server running in development mode on port 5000","service":"shopsphere-api","timestamp":"2025-09-23 21:52:52"}
+{"level":"info","message":"📚 API Documentation: http://localhost:5000/api-docs","service":"shopsphere-api","timestamp":"2025-09-23 21:52:52"}
+{"level":"info","message":"🏥 Health Check: http://localhost:5000/health","service":"shopsphere-api","timestamp":"2025-09-23 21:52:52"}
+{"duration":"39ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"shopsphere-api","status":304,"timestamp":"2025-09-23 21:54:04","url":"/top","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0","userId":null}
+{"duration":"119ms","ip":"::1","level":"info","message":"HTTP Request","method":"GET","service":"shopsphere-api","status":304,"timestamp":"2025-09-23 21:54:04","url":"/?","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0","userId":null}
+{"level":"info","message":"🚀 Server running in production mode on port 5000","service":"shopsphere-api","timestamp":"2025-09-23 21:56:46"}

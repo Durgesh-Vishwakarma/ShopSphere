@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { Form, Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Meta from "../components/Meta";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { Image } from "../components/ui/Image";
+import { Badge } from "../components/ui/Badge";
+import { Select } from "../components/ui/Select";
+import { ArrowLeft, Plus, Minus } from "lucide-react";
 import { useGetProductDetailsQuery, useCreateReviewMutation } from "../slices/productsApiSlice";
 import { addToCart } from "../slices/cartSlice";
 import './ProductScreen.css';
@@ -61,102 +65,105 @@ const ProductScreen = () => {
             ) : (
                <>
                   <Meta title={product.name} description={product.description} />
-                  <Row className="product-details-row">
-                     <Col md={5} className="product-image-col">
-                        <Image src={product.image} alt={product.name} fluid className="product-image" />
-                     </Col>
-                     <Col md={4}>
-                        <ListGroup variant="flush" className="product-info-list">
-                           <ListGroup.Item>
-                              <h3>{product.name}</h3>
-                           </ListGroup.Item>
-                           <ListGroup.Item>
-                              <Rating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? 'review' : 'reviews'}`} />
-                           </ListGroup.Item>
-                           <ListGroup.Item><b>Price:</b> ${product.price}</ListGroup.Item>
-                           <ListGroup.Item><b>Description:</b> {product.description}</ListGroup.Item>
-                        </ListGroup>
-                     </Col>
-                     <Col md={3}>
-                        <Card className="product-card-summary">
-                           <ListGroup variant="flush">
-                              <ListGroup.Item>
-                                 <Row>
-                                    <Col>Price:</Col>
-                                    <Col>
-                                       <strong>${product.price}</strong>
-                                    </Col>
-                                 </Row>
-                              </ListGroup.Item>
-                              <ListGroup.Item>
-                                 <Row>
-                                    <Col>Status:</Col>
-                                    <Col>
-                                       <strong>
-                                          {product.countInStock ? 'In Stock' : 'Out of Stock'}
-                                       </strong>
-                                    </Col>
-                                 </Row>
-                              </ListGroup.Item>
-                              {product.countInStock && (
-                                 <ListGroup.Item>
-                                    <Row>
-                                       <Col>Quantity:</Col>
-                                       <Col>
-                                          <Form.Control 
-                                             as='select' 
-                                             value={qty} 
-                                             onChange={(event) => setQty(Number(event.target.value))}
-                                          >
-                                             {[...Array(product.countInStock).keys()].map(idx => (
-                                                <option key={idx + 1} value={idx + 1}>
-                                                   {idx + 1}
-                                                </option>
-                                             ))}
-                                          </Form.Control>
-                                       </Col>
-                                    </Row>
-                                 </ListGroup.Item>
-                              )}
-                              <ListGroup.Item className="center">
-                                 <Button 
-                                    className="btn-black" 
-                                    type="button" 
-                                    disabled={product.countInStock === 0}
-                                    onClick={addToCartHandler}
-                                 >
-                                    Add To Cart
-                                 </Button>
-                              </ListGroup.Item>
-                           </ListGroup>
+                  <div className="grid lg:grid-cols-3 gap-8">
+                     <div className="lg:col-span-1">
+                        <Image src={product.image} alt={product.name} className="w-full h-96 object-cover rounded-lg shadow-lg" />
+                     </div>
+                     <div className="lg:col-span-1">
+                        <Card className="p-6 h-fit">
+                           <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+                           <div className="space-y-4">
+                              <div>
+                                 <Rating value={product.rating} text={`${product.numReviews} ${product.numReviews === 1 ? 'review' : 'reviews'}`} />
+                              </div>
+                              <div>
+                                 <span className="text-3xl font-bold text-orange-500">${product.price}</span>
+                              </div>
+                              <div>
+                                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
+                                 <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                              </div>
+                           </div>
                         </Card>
-                     </Col>
-                  </Row>
-                  <Row className="review">
-                     <Col md={5}>
-                        <h2>Reviews</h2>
+                     </div>
+                     <div className="lg:col-span-1">
+                        <Card className="p-6 sticky top-8">
+                           <div className="space-y-6">
+                              <div className="flex justify-between items-center">
+                                 <span className="text-lg font-medium text-gray-900">Price:</span>
+                                 <span className="text-2xl font-bold text-orange-500">${product.price}</span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                 <span className="text-lg font-medium text-gray-900">Status:</span>
+                                 <Badge variant={product.countInStock > 0 ? 'success' : 'danger'}>
+                                    {product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}
+                                 </Badge>
+                              </div>
+
+                              {product.countInStock > 0 && (
+                                 <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                       Quantity
+                                    </label>
+                                    <Select 
+                                       value={qty}
+                                       onChange={(e) => setQty(Number(e.target.value))}
+                                       className="w-full"
+                                    >
+                                       {[...Array(product.countInStock).keys()].map((x) => (
+                                          <option key={x + 1} value={x + 1}>
+                                             {x + 1}
+                                          </option>
+                                       ))}
+                                    </Select>
+                                 </div>
+                              )}
+
+                              <Button
+                                 onClick={addToCartHandler}
+                                 disabled={product.countInStock === 0}
+                                 className="w-full bg-gray-900 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                 size="lg"
+                              >
+                                 <Plus className="w-4 h-4 mr-2" />
+                                 Add To Cart
+                              </Button>
+                           </div>
+                        </Card>
+                     </div>
+                  </div>
+                  <div className="mt-12">
+                     <div className="max-w-3xl">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Reviews</h2>
                         {product.reviews.length === 0 && <Message>No Reviews</Message>}
-                        <ListGroup variant="flush">
+                        <div className="space-y-6">
                            {product.reviews.map(review => (
-                              <ListGroup.Item key={review._id}>
-                                 <strong>{review.name}</strong>
-                                 <Rating value={review.rating} />
-                                 <p>{review.createdAt.substring(0, 10)}</p>
-                                 <p>{review.comment}</p>
-                              </ListGroup.Item>
+                              <Card key={review._id} className="p-6">
+                                 <div className="space-y-3">
+                                    <div className="flex justify-between items-start">
+                                       <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                                       <span className="text-sm text-gray-500">{review.createdAt.substring(0, 10)}</span>
+                                    </div>
+                                    <Rating value={review.rating} />
+                                    <p className="text-gray-600 leading-relaxed">{review.comment}</p>
+                                 </div>
+                              </Card>
                            ))}
-                           <ListGroup.Item>
-                              <h2>Write a Customer Review</h2>
+                           
+                           <Card className="p-6">
+                              <h3 className="text-xl font-semibold text-gray-900 mb-6">Write a Customer Review</h3>
                               
                               {productReviewLoading && <Loader />}
                               {userInfo ? (
-                                 <Form onSubmit={formSubmitHandler}>
-                                    <Form.Group controlId="rating" className="my-2">
-                                       <Form.Label>Rating</Form.Label>
-                                       <Form.Control
-                                          as="select"
+                                 <form onSubmit={formSubmitHandler} className="space-y-6">
+                                    <div>
+                                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                                          Rating
+                                       </label>
+                                       <Select
                                           value={rating}
-                                          onChange={event => setRating(Number(event.target.value))}
+                                          onChange={(e) => setRating(Number(e.target.value))}
+                                          className="w-full"
                                        >
                                           <option value=''>Select</option>
                                           <option value='1'>1 - Poor</option>
@@ -164,37 +171,39 @@ const ProductScreen = () => {
                                           <option value='3'>3 - Good</option>
                                           <option value='4'>4 - Very Good</option>
                                           <option value='5'>5 - Excellent</option>
-                                       </Form.Control>
-                                    </Form.Group>
+                                       </Select>
+                                    </div>
 
-                                    <Form.Group controlId="comment" className="my-2">
-                                       <Form.Label>Comment</Form.Label>
-                                       <Form.Control
-                                          as="textarea"
-                                          rows='3'
+                                    <div>
+                                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                                          Comment
+                                       </label>
+                                       <textarea
+                                          rows={3}
                                           placeholder="Write a comment"
                                           value={comment}
-                                          onChange={event => setComment(event.target.value)}
+                                          onChange={(e) => setComment(e.target.value)}
+                                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
                                        />
-                                    </Form.Group>
+                                    </div>
 
                                     <Button 
                                        disabled={productReviewLoading}
                                        type="submit"
-                                       variant="primary"
+                                       className="bg-gray-900 hover:bg-orange-500 text-white"
                                     >
                                        Submit Review
                                     </Button>
-                                 </Form>
+                                 </form>
                               ) : (
                                  <Message>
                                     Please <Link to='/auth'>sign in</Link> to write a review
                                  </Message>
                               )}
-                           </ListGroup.Item>
-                        </ListGroup>
-                     </Col>
-                  </Row>  
+                           </Card>
+                        </div>
+                     </div>
+                  </div>  
                </>
             )
          )}

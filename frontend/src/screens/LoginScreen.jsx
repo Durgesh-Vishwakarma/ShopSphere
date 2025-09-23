@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
+import FormContainer from "../components/FormContainer";
+import { Button } from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
+import { Card } from "../components/ui/Card";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
-import { toast } from "react-toastify";
-import './RegisterScreen.css'; // Reuse the same CSS as RegisterScreen
 
 const LoginScreen = () => {
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
+   const [error, setError] = useState('');
 
    const dispatch = useDispatch();
    const navigate = useNavigate();
 
    const [login, { isLoading }] = useLoginMutation();
-
    const { userInfo } = useSelector(state => state.auth);
 
    const { search } = useLocation();
@@ -29,66 +30,92 @@ const LoginScreen = () => {
       }
    }, [userInfo, navigate, redirect]);
 
-   const formSubmitHandler = async event => {
+   const formSubmitHandler = async (event) => {
       event.preventDefault();
+      setError('');
+      
       try {
          const responseData = await login({ email, password }).unwrap();
          dispatch(setCredentials({ ...responseData }));
          navigate(redirect);
-         toast.success('Logged in successfully')
       } catch (err) {
-         toast.error(err?.data?.message || err.error);
+         setError(err?.data?.message || err.error);
       }
    };
 
    return (
-      <div className="register-outer">
-         <div className="register-illustration">
-            {/* Use your own SVG/PNG illustration here */}
-            <img src="/images/register-illustration.jpg" alt="Welcome" />
-         </div>
-         <div className="register-form-panel">
-            <div className="register-form-container">
-               <div className="register-welcome">Welcome Back!</div>
-               <div className="register-desc">
-                  Sign in to continue your shopping journey.
+      <FormContainer>
+         <Card className="p-8 shadow-lg">
+           <div className="text-center mb-8">
+             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+             <p className="text-gray-600">Sign in to continue your shopping journey</p>
+           </div>
+
+           {error && (
+             <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+               {error}
+             </div>
+           )}
+
+           <form onSubmit={formSubmitHandler} className="space-y-6">
+             <div>
+               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                 Email Address
+               </label>
+               <Input
+                 id="email"
+                 type="email"
+                 placeholder="Enter your email"
+                 value={email}
+                 onChange={(e) => setEmail(e.target.value)}
+                 required
+               />
+             </div>
+
+             <div>
+               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                 Password
+               </label>
+               <Input
+                 id="password"
+                 type="password"
+                 placeholder="Enter your password"
+                 value={password}
+                 onChange={(e) => setPassword(e.target.value)}
+                 required
+               />
+             </div>
+
+             <Button
+               type="submit"
+               disabled={isLoading}
+               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50"
+               size="lg"
+             >
+               {isLoading ? 'Signing In...' : 'Sign In'}
+             </Button>
+
+             {isLoading && (
+               <div className="flex justify-center">
+                 <Loader />
                </div>
-               <h1>Sign In</h1>
-               <Form onSubmit={formSubmitHandler}>
-                  <Form.Group controlId="email" className="my-2">
-                     <Form.Label>Email Address</Form.Label>
-                     <Form.Control
-                        type="email"
-                        placeholder="Enter Email"
-                        value={email}
-                        onChange={event => setEmail(event.target.value)}
-                     />
-                  </Form.Group>
-                  <Form.Group controlId="password" className="my-2">
-                     <Form.Label>Password</Form.Label>
-                     <Form.Control
-                        type="password"
-                        placeholder="Enter Password"
-                        value={password}
-                        onChange={event => setPassword(event.target.value)}
-                     />
-                  </Form.Group>
-                  <Button type="submit" variant="primary" className="mt-2" disabled={isLoading}>
-                     Sign In
-                  </Button>
-                  {isLoading && <Loader className="loader" />}
-               </Form>
-               <Row className="py-3">
-                  <Col>
-                     New Customer? <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}>
-                        Register Now
-                     </Link>
-                  </Col>
-               </Row>
-            </div>
-         </div>
-      </div>
-   )
+             )}
+           </form>
+
+           <div className="mt-6 text-center">
+             <p className="text-sm text-gray-600">
+               New Customer?{' '}
+               <Link
+                 to={redirect ? `/register?redirect=${redirect}` : `/register`}
+                 className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+               >
+                 Register Now
+               </Link>
+             </p>
+           </div>
+         </Card>
+      </FormContainer>
+   );
 };
 
 export default LoginScreen;

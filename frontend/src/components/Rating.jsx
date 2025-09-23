@@ -1,25 +1,33 @@
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
-
+import { Star } from 'lucide-react';
 
 const Rating = ({ value, text }) => {
    return (
-      <div className='rating'>
-         <span>
-            { value >= 1 ? <FaStar /> : (value >= 0.5 ? <FaStarHalfAlt /> : <FaRegStar />) }
-         </span>
-         <span>
-            { value >= 2 ? <FaStar /> : (value >= 1.5 ? <FaStarHalfAlt /> : <FaRegStar />) }
-         </span>
-         <span>
-            { value >= 3 ? <FaStar /> : (value >= 2.5 ? <FaStarHalfAlt /> : <FaRegStar />) }
-         </span>
-         <span>
-            { value >= 4 ? <FaStar /> : (value >= 3.5 ? <FaStarHalfAlt /> : <FaRegStar />) }
-         </span>
-         <span>
-            { value >= 5 ? <FaStar /> : (value >= 4.5 ? <FaStarHalfAlt /> : <FaRegStar />) }
-         </span>
-         <span className="rating-text">{ text && text }</span>
+      <div className='flex items-center space-x-2'>
+         <div className="flex items-center space-x-1">
+            {[...Array(5)].map((_, index) => {
+               const starValue = index + 1;
+               const isFilled = value >= starValue;
+               const isHalfFilled = value >= starValue - 0.5 && value < starValue;
+               
+               return (
+                  <div key={index} className="relative">
+                     <Star 
+                        className={`w-4 h-4 ${
+                           isFilled ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                        }`}
+                     />
+                     {isHalfFilled && (
+                        <div className="absolute top-0 left-0 w-2 overflow-hidden">
+                           <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        </div>
+                     )}
+                  </div>
+               );
+            })}
+         </div>
+         {text && (
+            <span className="text-sm text-gray-600">{text}</span>
+         )}
       </div>
    );
 };

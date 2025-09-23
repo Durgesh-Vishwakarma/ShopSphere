@@ -1,16 +1,11 @@
-import { Container, Row, Col } from "react-bootstrap";
-
-
 const FormContainer = ({ children }) => {
    return (
-      <Container>
-         <Row className="justify-content-md-center">
-            <Col xs={12} md={6}>
-               { children }
-            </Col>
-         </Row>
-      </Container>
-   )
-}
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+         <div className="max-w-md w-full space-y-8">
+            {children}
+         </div>
+      </div>
+   );
+};
 
 export default FormContainer;

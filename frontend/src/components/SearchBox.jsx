@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Form, Button } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 
 const SearchBox = () => {
   const navigate = useNavigate();
@@ -18,25 +18,24 @@ const SearchBox = () => {
   };
 
   return (
-    <Form onSubmit={formSubmitHandler} className="d-flex w-100">
-      <Form.Control
-        type="text"
-        name="q"
-        placeholder="Search Products..."
-        value={keyword}
-        onChange={(event) => setKeyword(event.target.value)}
-        className="flex-grow-1"
-        style={{ width: "90%", minWidth: "250px", height: "40px" }} // Decreased height, 90% width
-      />
-      <Button
-        type="submit"
-        variant="primary" // Changed color to primary
-        className="mx-2 d-flex align-items-center justify-content-center"
-        style={{ height: "40px", minWidth: "80px" }} // Match height, set min width for better centering
-      >
-        <span className="w-100 text-center">Search</span>
-      </Button>
-    </Form>
+    <form onSubmit={formSubmitHandler} className="relative flex w-full max-w-md">
+      <div className="relative flex-1">
+        <input
+          type="text"
+          name="q"
+          placeholder="Search products..."
+          value={keyword}
+          onChange={(event) => setKeyword(event.target.value)}
+          className="w-full h-10 pl-4 pr-12 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+        />
+        <button
+          type="submit"
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 transition-colors duration-200"
+        >
+          <Search className="w-4 h-4" />
+        </button>
+      </div>
+    </form>
   );
 };
 
