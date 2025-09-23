@@ -18,15 +18,15 @@ ShopSphere/
 
 ### ✅ **Current Configuration:**
 ```env
-CLOUDINARY_CLOUD_NAME=durgeshvish9
-CLOUDINARY_API_KEY=941285986914732
-CLOUDINARY_API_SECRET=xxp2iwnCJcfw2F_XLCLPuRTBL7k
-MONGO_URI=mongodb+srv://Durgesh7972:Krishna7972@cluster0.fsownbi.mongodb.net/shophere
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/shopsphere
 PORT=5000
-JWT_SECRET=ShopSphere2025_SecureJWT_DurgeshVishwakarma_Production_Key_987654321
+JWT_SECRET=your_super_secure_jwt_secret_minimum_32_characters
 NODE_ENV=production
 PAGINATION_LIMIT=12
-FRONTEND_URL=https://shop-sphere-kohl.vercel.app
+FRONTEND_URL=https://your-frontend-domain.vercel.app
 ```
 
 ### 🎯 **What Each Variable Does:**
@@ -65,14 +65,14 @@ When deploying to Render, add these environment variables:
 
 ```env
 NODE_ENV=production
-MONGO_URI=mongodb+srv://Durgesh7972:Krishna7972@cluster0.fsownbi.mongodb.net/shophere
-JWT_SECRET=ShopSphere2025_SecureJWT_DurgeshVishwakarma_Production_Key_987654321
-CLOUDINARY_CLOUD_NAME=durgeshvish9
-CLOUDINARY_API_KEY=941285986914732
-CLOUDINARY_API_SECRET=xxp2iwnCJcfw2F_XLCLPuRTBL7k
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/shopsphere
+JWT_SECRET=your_super_secure_jwt_secret_minimum_32_characters
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 PORT=5000
 PAGINATION_LIMIT=12
-FRONTEND_URL=https://shop-sphere-kohl.vercel.app
+FRONTEND_URL=https://your-frontend-domain.vercel.app
 ```
 
 ### 🔧 **Vercel Frontend Settings:**
