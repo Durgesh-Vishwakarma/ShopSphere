@@ -70,6 +70,7 @@ app.use(generalLimiter);
 // CORS configuration
 const allowedOrigins = [
   'https://shop-sphere-kohl.vercel.app',
+  'https://shop-sphere-chi-ten.vercel.app', // Your current Vercel domain
   'http://localhost:3000',
   'http://localhost:5173', // Vite dev server
   'https://shop-sphere-git-main-durgesh-vishwakarmas-projects.vercel.app',
@@ -80,11 +81,27 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.includes(origin.replace(/\/$/, ''))) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    // Remove trailing slash for comparison
+    const cleanOrigin = origin.replace(/\/$/, '');
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(cleanOrigin)) {
+      return callback(null, true);
     }
+    
+    // Allow Vercel preview deployments (shop-sphere-*.vercel.app)
+    if (cleanOrigin.match(/^https:\/\/shop-sphere-.*\.vercel\.app$/)) {
+      return callback(null, true);
+    }
+    
+    // Allow localhost for development
+    if (cleanOrigin.startsWith('http://localhost')) {
+      return callback(null, true);
+    }
+    
+    // Log blocked origin for debugging
+    console.log('CORS blocked origin:', origin);
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
