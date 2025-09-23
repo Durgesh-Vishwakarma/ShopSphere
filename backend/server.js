@@ -76,7 +76,8 @@ const allowedOrigins = [
   'https://shop-sphere-git-main-durgesh-vishwakarmas-projects.vercel.app',
 ];
 
-app.use(cors({
+// CORS configuration - More permissive for Vercel deployments
+const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
@@ -89,24 +90,40 @@ app.use(cors({
       return callback(null, true);
     }
     
-    // Allow Vercel preview deployments (shop-sphere-*.vercel.app)
+    // Allow any Vercel deployment (shop-sphere-*.vercel.app)
     if (cleanOrigin.match(/^https:\/\/shop-sphere-.*\.vercel\.app$/)) {
       return callback(null, true);
     }
     
-    // Allow localhost for development
-    if (cleanOrigin.startsWith('http://localhost')) {
+    // Allow localhost for development on any port
+    if (cleanOrigin.match(/^https?:\/\/localhost(:\d+)?$/)) {
       return callback(null, true);
     }
     
     // Log blocked origin for debugging
-    console.log('CORS blocked origin:', origin);
+    logger.warn('CORS blocked origin:', origin);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}));
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With',
+    'Accept',
+    'Origin',
+    'Cache-Control',
+    'X-File-Name'
+  ],
+  exposedHeaders: ['Set-Cookie'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200 // For legacy browser support
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight OPTIONS requests explicitly
+app.options('*', cors(corsOptions));
 
 // Logging middleware
 if (process.env.NODE_ENV === 'development') {
