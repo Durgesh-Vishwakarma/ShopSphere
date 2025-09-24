@@ -7,7 +7,7 @@
 
 **A full-stack e-commerce application built with modern technologies and best practices**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-success?style=for-the-badge)](https://shop-sphere-kohl.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-success?style=for-the-badge)](https://shop-sphere-steel.vercel.app)
 [![Backend API](https://img.shields.io/badge/Backend%20API-Render-purple?style=for-the-badge)](https://your-render-backend-url.com)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/Durgesh-Vishwakarma/ShopSphere)
 
@@ -24,7 +24,7 @@
 ## � Live Deployment
 
 ### Production Environment
-- **🎨 Frontend**: [Vercel](https://shop-sphere-kohl.vercel.app) - Optimized React deployment with global CDN
+- **🎨 Frontend**: [Vercel](https://shop-sphere-steel.vercel.app) - Optimized React deployment with global CDN
 - **⚡ Backend**: [Render](https://your-render-backend-url.com) - Auto-scaling Node.js hosting
 - **📊 Database**: [MongoDB Atlas](https://cloud.mongodb.com) - Managed cloud database
 - **🖼️ Images**: [Cloudinary](https://cloudinary.com) - Optimized image delivery
