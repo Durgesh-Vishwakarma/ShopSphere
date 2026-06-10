@@ -17,7 +17,7 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
             {step.active ? (
               <Link
                 to={step.to}
-                className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base font-medium text-blue-600 hover:text-blue-800 border-b-2 border-blue-600 transition-colors duration-200 whitespace-nowrap"
+                className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base font-medium text-primary hover:text-primary/80 border-b-2 border-primary transition-colors duration-200 whitespace-nowrap"
               >
                 {step.label}
               </Link>

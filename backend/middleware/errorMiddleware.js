@@ -4,19 +4,23 @@ const notFound = (req, res, next) => {
    next(error);
 };
 
-const errorHandler = (err, req, res, next) => {
-   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-   let message = err.message;
+const errorHandler = (err, req, res, _next) => {
+   let statusCode = err.statusCode || (res.statusCode === 200 ? 500 : res.statusCode);
+   let message = err.message || 'Server error';
 
-   // Check for Mongoose bad ObjectId
    if (err.name === 'CastError' && err.kind === 'ObjectId') {
       message = 'Resource not found';
-      statusCode =  404;
+      statusCode = 404;
+   }
+
+   if (err.message === 'Not allowed by CORS') {
+      message = 'Origin is not allowed';
+      statusCode = 403;
    }
 
    res.status(statusCode).json({
       message,
-      stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
+      stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
    });
 };
 

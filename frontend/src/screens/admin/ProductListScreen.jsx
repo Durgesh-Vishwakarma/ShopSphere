@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import Paginate from "../../components/Paginate";
@@ -14,7 +15,8 @@ import {
 const ProductListScreen = () => {
 
    const { pageNumber } = useParams();
-   const { data, isLoading, error, refetch } = useGetProductsQuery({ pageNumber });
+   const navigate = useNavigate();
+   const { data, isLoading, error } = useGetProductsQuery({ pageNumber });
 
    const [createProduct, { isLoading: createLoading }] = useCreateProductMutation();
    const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation();
@@ -22,19 +24,20 @@ const ProductListScreen = () => {
    const deleteProductHandler = async (id) => {
       if (window.confirm('Are you sure you want to delete the product?')) {
          try {
-            await deleteProduct(id);
-            refetch();
+            await deleteProduct(id).unwrap();
          } catch (err) {
             // Handle error silently or with toast notification
          }
       }
-   };   const createProductHandler = async () => {
+   };
+
+   const createProductHandler = async () => {
       if (window.confirm('Are you sure you want to create a product?')) {
          try {
-            await createProduct();
-            refetch();
+            const createdProduct = await createProduct().unwrap();
+            navigate(`/admin/product/${createdProduct._id}/edit`);
          } catch (err) {
-            console.error('Create error:', err?.data?.message || err.error);
+            // Handle error silently or with toast notification
          }
       }
    };

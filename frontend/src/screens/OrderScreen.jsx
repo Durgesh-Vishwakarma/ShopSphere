@@ -8,6 +8,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Image } from '../components/ui/Image';
 import { Badge } from '../components/ui/Badge';
+import toast from 'react-hot-toast';
 import { 
    useGetOrderDetailsQuery, 
    usePayOrderMutation, 
@@ -50,17 +51,17 @@ const OrderScreen = () => {
    const onApproveHandler = async (data, actions) => {
       return actions.order.capture().then(async function (details) {
          try {
-            await payOrder({ orderId, details });
+            await payOrder({ orderId, details }).unwrap();
+            toast.success('Payment completed successfully');
             refetch();
-            console.log('Payment successful');
          } catch (err) {
-            console.error('Payment error:', err?.data?.message || err.message);
+            toast.error(err?.data?.message || err?.message || 'Payment verification failed');
          }
       });
    };
 
    const onErrorHandler = err => {
-      console.error('PayPal error:', err.message);
+      toast.error(err?.message || 'PayPal transaction failed');
    }; 
 
    const createOrderHandler = (data, actions) => {
@@ -77,11 +78,11 @@ const OrderScreen = () => {
 
    const deliverOrderHandler = async () => {
       try {
-         await deliverOrder(orderId);
+         await deliverOrder(orderId).unwrap();
+         toast.success('Order marked as delivered');
          refetch();
-         console.log('Order delivered successfully');
       } catch (err) {
-         console.error('Delivery error:', err?.data?.message || err.message);
+         toast.error(err?.data?.message || err?.message || 'Unable to update delivery status');
       }
    };
 
@@ -92,15 +93,13 @@ const OrderScreen = () => {
    }
 
    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div>
          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Order: {order._id}</h1>
+            <h1 className="text-2xl font-semibold text-gray-950">Order {order._id}</h1>
          </div>
 
-         <div className="grid lg:grid-cols-3 gap-8">
-            {/* Order Details */}
+         <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2 space-y-6">
-               {/* Shipping */}
                <Card className="p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Shipping</h2>
                   <div className="space-y-2 mb-4">
@@ -121,7 +120,6 @@ const OrderScreen = () => {
                   )}
                </Card>
 
-               {/* Payment Method */}
                <Card className="p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Payment Method</h2>
                   <p className="mb-4">
@@ -138,7 +136,6 @@ const OrderScreen = () => {
                   )}
                </Card>
 
-               {/* Order Items */}
                <Card className="p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Items</h2>
                   {order.orderItems.length === 0 ? (
@@ -146,18 +143,18 @@ const OrderScreen = () => {
                   ) : (
                      <div className="space-y-4">
                         {order.orderItems.map((item, index) => (
-                           <div key={index} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                           <div key={index} className="flex items-center space-x-4 rounded-md bg-gray-50 p-4">
                               <div className="flex-shrink-0">
                                  <Image 
                                     src={item.image} 
                                     alt={item.name} 
-                                    className="w-16 h-16 object-cover rounded-lg shadow-sm"
+                                    className="w-16 h-16 object-cover rounded-md"
                                  />
                               </div>
                               <div className="flex-1 min-w-0">
                                  <Link 
                                     to={`/product/${item.product}`}
-                                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                                    className="text-lg font-medium text-gray-900 hover:text-primary transition-colors"
                                  >
                                     {item.name}
                                  </Link>
@@ -174,9 +171,8 @@ const OrderScreen = () => {
                </Card>
             </div>
 
-            {/* Order Summary */}
             <div className="lg:col-span-1">
-               <Card className="p-6 sticky top-8">
+               <Card className="p-6 sticky top-20">
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
                   
                   <div className="space-y-3 mb-6">
@@ -195,7 +191,7 @@ const OrderScreen = () => {
                      <div className="border-t pt-3">
                         <div className="flex justify-between">
                            <span className="text-lg font-semibold text-gray-900">Total:</span>
-                           <span className="text-lg font-bold text-orange-500">${order.totalPrice}</span>
+                           <span className="text-lg font-semibold text-gray-950">${order.totalPrice}</span>
                         </div>
                      </div>
                   </div>
@@ -222,7 +218,7 @@ const OrderScreen = () => {
                      <div className="mt-4">
                         <Button 
                            onClick={deliverOrderHandler}
-                           className="w-full bg-gray-900 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition-colors"
+                           className="w-full"
                            size="lg"
                         >
                            Mark As Delivered

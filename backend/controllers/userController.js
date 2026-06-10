@@ -1,7 +1,10 @@
-// filepath: [userController.js](http://_vscodecontentref_/5)
 import asyncHandler from '../middleware/asyncHandler.js';
+import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
+import RevokedToken from '../models/revokedTokenModel.js';
 import generateToken from '../utils/generateToken.js';
+
+const DUMMY_PASSWORD_HASH = bcrypt.hashSync('shopsphere-dummy-password', 12);
 
 // @desc   Auth user and get token
 // @route  POST /api/users/auth
@@ -9,8 +12,10 @@ import generateToken from '../utils/generateToken.js';
 const authUser = asyncHandler(async (req, res) => {
    const { email, password } = req.body;
    const user = await User.findOne({ email: email });
+   const passwordHash = user ? user.password : DUMMY_PASSWORD_HASH;
+   const isPasswordValid = await bcrypt.compare(password, passwordHash);
 
-   if (user && (await user.isValidPassword(password))) {
+   if (user && isPasswordValid) {
       res.status(200).json({
          _id: user._id,
          name: user.name,
@@ -60,6 +65,17 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route  POST /api/users/logout
 // @access Private
 const logoutUser = asyncHandler(async (req, res) => {
+   if (req.authToken?.jti && req.authToken?.exp) {
+      await RevokedToken.updateOne(
+         { jti: req.authToken.jti },
+         {
+            jti: req.authToken.jti,
+            expiresAt: new Date(req.authToken.exp * 1000),
+         },
+         { upsert: true }
+      );
+   }
+
    res.status(200).json({ message: 'Logged out successfully' });
 });
 
@@ -89,6 +105,15 @@ const updateUserProfile = asyncHandler(async (req, res) => {
    const user = await User.findById(req.user._id);
 
    if (user) {
+      if (req.body.email && req.body.email !== user.email) {
+         const emailExists = await User.findOne({ email: req.body.email }).lean();
+
+         if (emailExists) {
+            res.status(400);
+            throw new Error('Email is already in use');
+         }
+      }
+
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
 
@@ -114,7 +139,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @route  GET /api/users
 // @access Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
-   const users = await User.find({});
+   const users = await User.find({}).select('-password').lean();
    res.status(200).json(users);
 });
 
@@ -145,7 +170,7 @@ const deleteUser = asyncHandler(async (req, res) => {
       }
 
       await User.deleteOne({ _id: user._id });
-      res.status(201).json({ message: 'User deleted successfully' });
+      res.status(200).json({ message: 'User deleted successfully' });
    } else {
       res.status(404);
       throw new Error('User not found');
@@ -159,9 +184,18 @@ const updateUser = asyncHandler(async (req, res) => {
    const user = await User.findById(req.params.id);
 
    if (user) {
+      if (req.body.email && req.body.email !== user.email) {
+         const emailExists = await User.findOne({ email: req.body.email }).lean();
+
+         if (emailExists) {
+            res.status(400);
+            throw new Error('Email is already in use');
+         }
+      }
+
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
-      user.isAdmin = Boolean(req.body.isAdmin);
+      user.isAdmin = req.body.isAdmin === undefined ? user.isAdmin : Boolean(req.body.isAdmin);
 
       const updatedUser = await user.save();
       res.status(200).json({

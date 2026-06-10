@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
@@ -7,8 +8,13 @@ import { X, Eye } from "lucide-react";
 import { useGetOrdersQuery } from "../../slices/ordersApiSlice";
 
 const OrderListScreen = () => {
+   const [page, setPage] = useState(1);
+   const limit = 20;
 
-   const { data: orders, isLoading, error } = useGetOrdersQuery();
+   const { data, isLoading, error } = useGetOrdersQuery({ page, limit });
+
+   const orders = Array.isArray(data) ? data : data?.orders || [];
+   const pages = Array.isArray(data) ? 1 : data?.pages || 1;
 
    return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -97,6 +103,28 @@ const OrderListScreen = () => {
                      </tbody>
                   </table>
                </div>
+
+               {pages > 1 && (
+                  <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                     <Button
+                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={page === 1}
+                        variant="outline"
+                     >
+                        Previous
+                     </Button>
+                     <span className="text-sm text-gray-600">
+                        Page {page} of {pages}
+                     </span>
+                     <Button
+                        onClick={() => setPage((prev) => Math.min(prev + 1, pages))}
+                        disabled={page === pages}
+                        variant="outline"
+                     >
+                        Next
+                     </Button>
+                  </div>
+               )}
             </div>
          )}
       </div>

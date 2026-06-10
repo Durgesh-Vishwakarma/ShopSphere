@@ -48,19 +48,17 @@ const PlaceOrderScreen = () => {
 
          dispatch(clearCart());
          navigate(`/order/${responseData._id}`);
-      } catch (error) {
-         // Handle error silently or with toast notification
+      } catch {
+         // The RTK Query error object is rendered in the order summary.
       }
    };
 
    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div>
          <CheckoutSteps step1 step2 step3 step4 />
          
-         <div className="grid lg:grid-cols-3 gap-8">
-            {/* Order Details */}
+         <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2 space-y-6">
-               {/* Shipping */}
                <Card className="p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Shipping</h2>
                   <p className="text-gray-600">
@@ -69,7 +67,6 @@ const PlaceOrderScreen = () => {
                   </p>
                </Card>
 
-               {/* Payment Method */}
                <Card className="p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Payment Method</h2>
                   <p className="text-gray-600">
@@ -78,7 +75,6 @@ const PlaceOrderScreen = () => {
                   </p>
                </Card>
 
-               {/* Order Items */}
                <Card className="p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Items</h2>
                   {cart.cartItems.length === 0 ? (
@@ -86,18 +82,18 @@ const PlaceOrderScreen = () => {
                   ) : (
                      <div className="space-y-4">
                         {cart.cartItems.map((item, index) => (
-                           <div key={index} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                           <div key={index} className="flex items-center space-x-4 rounded-md bg-gray-50 p-4">
                               <div className="flex-shrink-0">
                                  <Image 
                                     src={item.image} 
                                     alt={item.name} 
-                                    className="w-16 h-16 object-cover rounded-lg shadow-sm"
+                                    className="w-16 h-16 object-cover rounded-md"
                                  />
                               </div>
                               <div className="flex-1 min-w-0">
                                  <Link 
-                                    to={`/products/${item.product}`}
-                                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                                    to={`/product/${item._id || item.product}`}
+                                    className="text-lg font-medium text-gray-900 hover:text-primary transition-colors"
                                  >
                                     {item.name}
                                  </Link>
@@ -114,9 +110,8 @@ const PlaceOrderScreen = () => {
                </Card>
             </div>
 
-            {/* Order Summary */}
             <div className="lg:col-span-1">
-               <Card className="p-6 sticky top-8">
+               <Card className="p-6 sticky top-20">
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
                   
                   <div className="space-y-4 mb-6">
@@ -132,10 +127,10 @@ const PlaceOrderScreen = () => {
                         <span className="text-gray-600">Tax:</span>
                         <span className="font-medium">${cart.taxPrice}</span>
                      </div>
-                     <div className="border-t pt-4">
+                     <div className="border-t border-gray-200 pt-4">
                         <div className="flex justify-between">
                            <span className="text-lg font-semibold text-gray-900">Total:</span>
-                           <span className="text-lg font-bold text-orange-500">${cart.totalPrice}</span>
+                           <span className="text-lg font-bold text-primary">${cart.totalPrice}</span>
                         </div>
                      </div>
                   </div>
@@ -150,7 +145,7 @@ const PlaceOrderScreen = () => {
                      <Button 
                         onClick={placeOrderHandler}
                         disabled={cart.cartItems.length === 0}
-                        className="w-full bg-gray-900 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full"
                         size="lg"
                      >
                         Place Order

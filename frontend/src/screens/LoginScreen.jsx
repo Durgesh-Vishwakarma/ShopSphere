@@ -45,10 +45,10 @@ const LoginScreen = () => {
 
    return (
       <FormContainer>
-         <Card className="p-8 shadow-lg">
+         <Card className="p-8">
            <div className="text-center mb-8">
-             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-             <p className="text-gray-600">Sign in to continue your shopping journey</p>
+             <h1 className="text-2xl font-semibold text-gray-950 mb-2">Sign In</h1>
+             <p className="text-gray-600">Access your orders, cart, and account.</p>
            </div>
 
            {error && (
@@ -89,7 +89,7 @@ const LoginScreen = () => {
              <Button
                type="submit"
                disabled={isLoading}
-               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50"
+               className="w-full"
                size="lg"
              >
                {isLoading ? 'Signing In...' : 'Sign In'}
@@ -107,7 +107,7 @@ const LoginScreen = () => {
                New Customer?{' '}
                <Link
                  to={redirect ? `/register?redirect=${redirect}` : `/register`}
-                 className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                 className="font-medium text-primary hover:text-primary/80"
                >
                  Register Now
                </Link>

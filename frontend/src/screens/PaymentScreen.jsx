@@ -36,10 +36,10 @@ const PaymentScreen = () => {
       <FormContainer>
          <CheckoutSteps step1 step2 step3 />
 
-         <Card className="p-8 shadow-lg">
+         <Card className="p-8">
             <div className="text-center mb-8">
-               <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Method</h1>
-               <p className="text-gray-600">Choose your preferred payment option</p>
+               <h1 className="text-2xl font-semibold text-gray-950 mb-2">Payment Method</h1>
+               <p className="text-gray-600">Choose how you want to pay.</p>
             </div>
 
             <form onSubmit={formSubmitHandler} className="space-y-6">
@@ -48,14 +48,14 @@ const PaymentScreen = () => {
                      Select Payment Method
                   </label>
                   <div className="space-y-3">
-                     <label className="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
+                     <label className="flex cursor-pointer items-center rounded-lg border border-gray-200 p-4 hover:bg-gray-50">
                         <input
                            type="radio"
                            name="paymentMethod"
                            value="PayPal"
                            checked={paymentMethod === 'PayPal'}
                            onChange={(e) => setPaymentMethod(e.target.value)}
-                           className="mr-3 text-blue-600"
+                           className="mr-3 text-primary"
                         />
                         <div className="flex-1">
                            <span className="text-sm font-medium text-gray-900">PayPal or Credit Card</span>
@@ -67,7 +67,7 @@ const PaymentScreen = () => {
 
                <Button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+                  className="w-full"
                   size="lg"
                >
                   Continue to Review Order

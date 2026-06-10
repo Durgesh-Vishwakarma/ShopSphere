@@ -26,11 +26,12 @@ const SearchBox = () => {
           placeholder="Search products..."
           value={keyword}
           onChange={(event) => setKeyword(event.target.value)}
-          className="w-full h-10 pl-4 pr-12 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+          className="input pr-10"
         />
         <button
           type="submit"
-          className="absolute right-1 top-1/2 transform -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 transition-colors duration-200"
+          className="absolute right-1 top-1/2 -translate-y-1/2 rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+          aria-label="Search"
         >
           <Search className="w-4 h-4" />
         </button>

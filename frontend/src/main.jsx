@@ -4,13 +4,10 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import store from './store.js';
 import './index.css';
 import App from './App.jsx';
 import reportWebVitals from './reportWebVitals';
-import usePerformanceMonitoring from './hooks/usePerformanceMonitoring';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
 import HomeScreen from './screens/HomeScreen';
@@ -40,52 +37,6 @@ import FAQScreen from './screens/FAQScreen.jsx';
 import ProductsScreen from './screens/ProductsScreen.jsx';
 import TrackOrderScreen from './screens/TrackOrderScreen.jsx';
 import CookiePolicyScreen from './screens/CookiePolicyScreen.jsx';
-
-
-// Create React Query client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      cacheTime: 1000 * 60 * 10, // 10 minutes
-      retry: (failureCount, error) => {
-        if (error.status === 404) return false;
-        return failureCount < 2;
-      },
-    },
-  },
-});
-
-// Performance Monitoring Component
-const PerformanceWrapper = ({ children }) => {
-  usePerformanceMonitoring();
-  return children;
-};
-
-// Service Worker Registration
-const registerSW = async () => {
-  if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-    try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('SW registered: ', registration);
-      
-      // Listen for updates
-      registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New content is available
-            if (confirm('New version available! Reload to update?')) {
-              window.location.reload();
-            }
-          }
-        });
-      });
-    } catch (error) {
-      console.log('SW registration failed: ', error);
-    }
-  }
-};
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -134,22 +85,14 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
-        <Provider store={store}>
-          <PayPalScriptProvider deferLoading={false}>
-            <PerformanceWrapper>
-              <RouterProvider router={router} />
-            </PerformanceWrapper>
-          </PayPalScriptProvider>
-        </Provider>
-      </HelmetProvider>
-      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
-    </QueryClientProvider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <PayPalScriptProvider deferLoading={false}>
+          <RouterProvider router={router} />
+        </PayPalScriptProvider>
+      </Provider>
+    </HelmetProvider>
   </React.StrictMode>
 );
-
-// Register service worker
-registerSW();
 
 reportWebVitals();

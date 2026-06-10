@@ -7,8 +7,6 @@ const baseQuery = fetchBaseQuery({
     const token = getState().auth?.userInfo?.token;
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
-    } else {
-      console.warn('No token found in state');
     }
     return headers;
   },
@@ -16,6 +14,6 @@ const baseQuery = fetchBaseQuery({
 
 export const apiSlice = createApi({
   baseQuery,
-  tagTypes: ['Product', 'Order', 'User'],
+  tagTypes: ['Product', 'Products', 'Order', 'Orders', 'User', 'Users'],
   endpoints: (builder) => ({}),
 });

@@ -6,23 +6,23 @@ import FormContainer from "../../components/FormContainer";
 import { Button } from "../../components/ui/Button";
 import { Input } from "../../components/ui/Input";
 import { Card } from "../../components/ui/Card";
+import toast from "react-hot-toast";
 import { 
    useUpdateProductMutation, 
    useGetProductDetailsQuery, 
    useUploadProductImageMutation 
 } from '../../slices/productsApiSlice';
-import './ProductEditScreen.css';
 
 const ProductEditScreen = () => {
 
    const { id: productId } = useParams();
 
    const [name, setName] = useState('');
-   const [price, setPrice] = useState(0);
+   const [price, setPrice] = useState('0');
    const [image, setImage] = useState('');
    const [brand, setBrand] = useState('');
    const [category, setCategory] = useState('');
-   const [countInStock, setCountInStock] = useState(0);
+   const [countInStock, setCountInStock] = useState('0');
    const [description, setDescription] = useState('');
 
    const { data: product, isLoading, refetch, error } = useGetProductDetailsQuery(productId);
@@ -37,11 +37,11 @@ const ProductEditScreen = () => {
    useEffect(() => {
       if (product) {
          setName(product.name);
-         setPrice(product.price);
+         setPrice(String(product.price));
          setImage(product.image);
          setBrand(product.brand);
          setCategory(product.category);
-         setCountInStock(product.countInStock);
+         setCountInStock(String(product.countInStock));
          setDescription(product.description);
       }
    }, [product]);
@@ -52,26 +52,23 @@ const ProductEditScreen = () => {
       const updatedProduct = {
          productId,
          name,
-         price,
+         price: Number(price),
          image,
          brand,
          category,
-         countInStock,
+         countInStock: Number(countInStock),
          description
       };
 
-      const result = await updateProduct(updatedProduct);
-
-      if (result.error) {
-         toast.error(result.error);
-      }
-
-      else {
+      try {
+         await updateProduct(updatedProduct).unwrap();
          toast.success('Product updated successfully');
          refetch();
          navigate('/admin/productlist');
+      } catch (err) {
+         const validationMessage = err?.data?.errors?.[0]?.msg;
+         toast.error(validationMessage || err?.data?.message || err?.error || 'Failed to update product');
       }
-
    };
 
    const uploadFileHandler = async event => {
@@ -90,107 +87,130 @@ const ProductEditScreen = () => {
 
 
    return (
-      <>
-         <Link to='/admin/productlist' className='btn btn-light my-3'>
-            Go Back
+      <div className="space-y-4">
+         <Link to='/admin/productlist' className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+            Back to products
          </Link>
 
          <FormContainer>
-            <div className="product-edit-container">
-               <h1>Edit Product</h1>
+            <Card className="p-6 shadow-lg space-y-4">
+               <h1 className="text-2xl font-bold text-gray-900">Edit Product</h1>
                {updateLoading && <Loader />}
 
                {isLoading ? <Loader /> : (
                   error ? (
-                     <Message variant='danger'>{error.data.message}</Message>
+                     <Message variant='danger'>{error?.data?.message || error?.error}</Message>
                   ) : (
-                     <Form onSubmit={formSubmitHandler}>
-                        <Form.Group controlId='name' className='my-2'>
-                           <Form.Label>Name</Form.Label>
-                           <Form.Control 
-                              type='text'
-                              placeholder='Enter Name'
+                     <form onSubmit={formSubmitHandler} className="space-y-4">
+                        <div>
+                           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                           <Input
+                              id="name"
+                              type="text"
+                              placeholder="Enter product name"
                               value={name}
-                              onChange={event => setName(event.target.value)} 
+                              onChange={(event) => setName(event.target.value)}
+                              required
                            />
-                        </Form.Group>
+                        </div>
 
-                        <Form.Group controlId='price' className='my-2'>
-                           <Form.Label>Price</Form.Label>
-                           <Form.Control 
-                              type='number'
-                              placeholder='Enter Price'
+                        <div>
+                           <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                           <Input
+                              id="price"
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              placeholder="Enter price"
                               value={price}
-                              onChange={event => setPrice(event.target.value)} 
+                              onChange={(event) => setPrice(event.target.value)}
+                              required
                            />
-                        </Form.Group>
+                        </div>
 
-                        <Form.Group controlId='image' className='my-2'>
-                           <Form.Label>Image</Form.Label>
-                           <Form.Control 
-                              type='text' 
-                              placeholder='Enter image URL' 
+                        <div>
+                           <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                           <Input
+                              id="image"
+                              type="text"
+                              placeholder="Enter image URL"
                               value={image}
-                              onChange={(event) => setImage(event.target.value)} // ✅ Correct
-
+                              onChange={(event) => setImage(event.target.value)}
+                              required
                            />
-                           <Form.Control 
-                              type='file'
-                              label='Choose an image'
+                        </div>
+
+                        <div>
+                           <label htmlFor="image-file" className="block text-sm font-medium text-gray-700 mb-1">Upload image</label>
+                           <Input
+                              id="image-file"
+                              type="file"
+                              accept="image/*"
                               onChange={uploadFileHandler}
                            />
-                        </Form.Group>
-                        {uploadLoading && <Loader />}
+                           {uploadLoading && <Loader />}
+                        </div>
 
-                        <Form.Group controlId='brand' className='my-2'>
-                           <Form.Label>Brand</Form.Label>
-                           <Form.Control 
-                              type='text'
-                              placeholder='Enter Brand'
+                        <div>
+                           <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+                           <Input
+                              id="brand"
+                              type="text"
+                              placeholder="Enter brand"
                               value={brand}
-                              onChange={event => setBrand(event.target.value)} 
+                              onChange={(event) => setBrand(event.target.value)}
+                              required
                            />
-                        </Form.Group>
+                        </div>
 
-                        <Form.Group controlId='category' className='my-2'>
-                           <Form.Label>Category</Form.Label>
-                           <Form.Control 
-                              type='text'
-                              placeholder='Enter Category'
+                        <div>
+                           <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                           <Input
+                              id="category"
+                              type="text"
+                              placeholder="Enter category"
                               value={category}
-                              onChange={event => setCategory(event.target.value)} 
+                              onChange={(event) => setCategory(event.target.value)}
+                              required
                            />
-                        </Form.Group>
+                        </div>
 
-                        <Form.Group controlId='countInStock' className='my-2'>
-                           <Form.Label>Count in Stock</Form.Label>
-                           <Form.Control 
-                              type='number'
-                              placeholder='Enter count in stock'
+                        <div>
+                           <label htmlFor="countInStock" className="block text-sm font-medium text-gray-700 mb-1">Count In Stock</label>
+                           <Input
+                              id="countInStock"
+                              type="number"
+                              min="0"
+                              step="1"
+                              placeholder="Enter stock count"
                               value={countInStock}
-                              onChange={event => setCountInStock(event.target.value)} 
+                              onChange={(event) => setCountInStock(event.target.value)}
+                              required
                            />
-                        </Form.Group>
+                        </div>
 
-                        <Form.Group controlId='description' className='my-2'>
-                           <Form.Label>Description</Form.Label>
-                           <Form.Control 
-                              type='text'
-                              placeholder='Enter Description'
+                        <div>
+                           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                           <textarea
+                              id="description"
+                              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Enter description"
+                              rows={4}
                               value={description}
-                              onChange={event => setDescription(event.target.value)} 
+                              onChange={(event) => setDescription(event.target.value)}
+                              required
                            />
-                        </Form.Group>
+                        </div>
 
-                        <Button type='submit' variant='primary' className='my-2'>
-                           Update
+                        <Button type='submit' className='w-full bg-blue-600 hover:bg-blue-700 text-white'>
+                           Update Product
                         </Button>
-                     </Form>
+                     </form>
                   )
                )}
-            </div>
+            </Card>
          </FormContainer>
-      </>
+      </div>
    )
 }
 

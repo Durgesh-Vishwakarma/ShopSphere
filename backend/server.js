@@ -6,22 +6,14 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import mongoSanitize from 'express-mongo-sanitize';
-import xss from 'xss-clean';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import mongoose from 'mongoose';
-
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { generalLimiter, apiLimiter } from './middleware/rateLimitMiddleware.js';
 import { httpLogger } from './utils/logger.js';
 import { specs, swaggerUi } from './config/swagger.js';
 import logger from './utils/logger.js';
-
-// Import models for debug endpoint
-import User from './models/userModel.js';
-import Product from './models/productModel.js';
-import Order from './models/orderModel.js';
 
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -30,6 +22,14 @@ import uploadRoutes from './routes/uploadRoutes.js';
 
 // Load environment variables
 dotenv.config();
+
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET env var not set');
+}
+
+if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
+  throw new Error('FRONTEND_URL env var not set');
+}
 
 // Connect to MongoDB
 connectDB();
@@ -61,9 +61,6 @@ app.use(compression());
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 
-// Data sanitization against XSS
-app.use(xss());
-
 // Prevent parameter pollution
 app.use(hpp({
   whitelist: ['sort', 'fields', 'page', 'limit', 'category']
@@ -73,41 +70,38 @@ app.use(hpp({
 app.use('/api/', apiLimiter);
 app.use(generalLimiter);
 
-// CORS configuration
-const allowedOrigins = [
-  'https://shop-sphere-kohl.vercel.app',
-  'https://shop-sphere-chi-ten.vercel.app', // Your current Vercel domain
-  'http://localhost:3000',
-  'http://localhost:5173', // Vite dev server
-  'https://shop-sphere-git-main-durgesh-vishwakarmas-projects.vercel.app',
-];
+const getAllowedOrigins = () => {
+  const envOrigins = [process.env.FRONTEND_URL, process.env.SERVER_URL]
+    .filter(Boolean)
+    .flatMap((value) => value.split(','))
+    .map((origin) => origin.trim().replace(/\/$/, ''))
+    .filter(Boolean);
 
-// CORS configuration - More permissive for Vercel deployments
+  if (process.env.NODE_ENV === 'production') {
+    return envOrigins;
+  }
+
+  return [
+    ...envOrigins,
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5173',
+  ];
+};
+
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
-    // Remove trailing slash for comparison
+
     const cleanOrigin = origin.replace(/\/$/, '');
-    
-    // Check if origin is in allowed list
+    const allowedOrigins = getAllowedOrigins();
+
     if (allowedOrigins.includes(cleanOrigin)) {
       return callback(null, true);
     }
-    
-    // Allow any Vercel deployment (shop-sphere-*.vercel.app)
-    if (cleanOrigin.match(/^https:\/\/shop-sphere-.*\.vercel\.app$/)) {
-      return callback(null, true);
-    }
-    
-    // Allow localhost for development on any port
-    if (cleanOrigin.match(/^https?:\/\/localhost(:\d+)?$/)) {
-      return callback(null, true);
-    }
-    
-    // Log blocked origin for debugging
-    logger.warn('CORS blocked origin:', origin);
+
+    logger.warn('CORS blocked origin', { origin });
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
@@ -143,11 +137,13 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // API Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
-  explorer: true,
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'ShopSphere API Documentation'
-}));
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'ShopSphere API Documentation'
+  }));
+}
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -158,45 +154,6 @@ app.get('/health', (req, res) => {
     environment: process.env.NODE_ENV,
     version: '2.0.0'
   });
-});
-
-// Database status endpoint for debugging
-app.get('/api/debug/db-status', async (req, res) => {
-  try {
-    const productCount = await Product.countDocuments();
-    const userCount = await User.countDocuments();
-    const orderCount = await Order.countDocuments();
-    
-    // Get first few products for verification
-    const sampleProducts = await Product.find().limit(3).select('name price image');
-    
-    res.json({
-      status: 'success',
-      database: {
-        connected: mongoose.connection.readyState === 1,
-        host: mongoose.connection.host,
-        name: mongoose.connection.name,
-        collections: {
-          products: productCount,
-          users: userCount,
-          orders: orderCount
-        },
-        sampleProducts
-      },
-      environment: {
-        nodeEnv: process.env.NODE_ENV,
-        mongoUri: process.env.MONGO_URI ? 'SET' : 'NOT_SET',
-        port: process.env.PORT,
-        paginationLimit: process.env.PAGINATION_LIMIT
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    });
-  }
 });
 
 // API Routes
@@ -214,13 +171,24 @@ app.get('/api/config/paypal', (req, res) => {
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
+const frontendDistPath = path.join(__dirname, '/frontend/dist');
+const frontendIndexPath = path.resolve(__dirname, 'frontend', 'dist', 'index.html');
+
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/frontend/dist')));
-  
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
-  );
+  app.use(express.static(frontendDistPath, {
+    maxAge: '1y',
+    etag: true,
+    lastModified: true,
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('index.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+        return;
+      }
+
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    },
+  }));
 } else {
   app.get('/', (req, res) => {
     res.json({
@@ -231,6 +199,19 @@ if (process.env.NODE_ENV === 'production') {
     });
   });
 }
+
+// SPA fallback for deep links
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path === '/health' || req.path.startsWith('/uploads')) {
+    return next();
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    return res.redirect(`http://localhost:5173${req.originalUrl}`);
+  }
+
+  return res.sendFile(frontendIndexPath);
+});
 
 // Error Handling Middleware
 app.use(notFound);

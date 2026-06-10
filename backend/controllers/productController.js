@@ -7,37 +7,41 @@ import Product from "../models/productModel.js";
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
    const pageSize = Number(process.env.PAGINATION_LIMIT) || 12;
-   const page = Number(req.query.page || req.query.pageNumber) || 1;
+   const page = Math.max(Number(req.query.page || req.query.pageNumber) || 1, 1);
+   const keyword = typeof req.query.keyword === 'string' ? req.query.keyword.trim() : '';
+   const searchFilter = keyword ? { $text: { $search: keyword } } : {};
+   const projection = keyword
+      ? { reviews: 0, score: { $meta: 'textScore' } }
+      : { reviews: 0 };
+   const sort = keyword
+      ? { score: { $meta: 'textScore' }, createdAt: -1 }
+      : { createdAt: -1 };
 
-   const keyword = req.query.keyword ? { name: { $regex: req.query.keyword, $options: 'i' } } : {};
+   const [count, products] = await Promise.all([
+      Product.countDocuments(searchFilter),
+      Product.find(searchFilter, projection)
+         .sort(sort)
+         .limit(pageSize)
+         .skip(pageSize * (page - 1))
+         .populate('user', 'name email')
+         .lean(),
+   ]);
 
-   console.log('getProducts called with:', { page, pageSize, keyword, query: req.query });
-
-   const count = await Product.countDocuments({ ...keyword });
-   console.log('Product count:', count);
-
-   const products = await Product.find({ ...keyword })
-     .limit(pageSize)
-     .skip(pageSize * (page - 1))
-     .populate('user', 'name email');
-
-   console.log('Products found:', products.length);
-
-   res.json({ 
-     products, 
-     page, 
-     pages: Math.ceil(count / pageSize),
-     total: count,
-     pageSize 
+   res.json({
+      products,
+      page,
+      pages: Math.ceil(count / pageSize),
+      total: count,
+      pageSize,
    });
 });
 
 
 // @desc   Fetch a product
 // @route  GET /api/products/:id
-// @access Private
+// @access Public
 const getProductById = asyncHandler(async (req, res) => {
-   const product = await Product.findById(req.params.id);
+   const product = await Product.findById(req.params.id).lean();
 
    if (product) {
       return res.json(product);
@@ -129,15 +133,12 @@ const createProductReview = asyncHandler(async (req, res) => {
    const product = await Product.findById(req.params.id);
 
    if (product) {
-      if (product.reviews.length !== 0) {
+      const reviewed = product.reviews.find(review =>
+         review.user.toString() === req.user._id.toString());
 
-         const reviewed = product.reviews.find(review => 
-            review.user.toString() === req.user._id.toString());
-
-         if (reviewed) {
-            res.status(400);
-            throw new Error('Product already Reviewed');
-         }
+      if (reviewed) {
+         res.status(400);
+         throw new Error('Product already reviewed');
       }
 
       const review = {
@@ -167,13 +168,12 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route  GET /api/products/top
 // @access Public
 const getTopProducts = asyncHandler(async (req, res) => {
-   console.log('getTopProducts called');
-   const count = await Product.countDocuments();
-   console.log('Total products in database:', count);
-   
-   const products = await Product.find({}).sort({ rating: -1 }).limit(3);
-   console.log('Top products found:', products.length);
-   
+   const products = await Product.find({})
+      .select('_id name image imageVariants price rating numReviews')
+      .sort({ rating: -1 })
+      .limit(3)
+      .lean();
+
    res.status(200).json(products);
 });
 

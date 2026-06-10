@@ -26,15 +26,47 @@ const RegisterScreen = () => {
    const searchParams = new URLSearchParams(search);
    const redirect = searchParams.get('redirect') || '/';
 
+  const isPasswordComplex = (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value);
+  const isEmailValid = (value) => /\S+@\S+\.\S+/.test(value);
+
    useEffect(() => {
       if (userInfo) {
          navigate(redirect);
       }
    }, [userInfo, navigate, redirect]);
 
+   
    const formSubmitHandler = async (event) => {
       event.preventDefault();
       setError('');
+
+    const trimmedName = name.trim();
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!trimmedName || !normalizedEmail || !password || !confirmPassword) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    if (!isEmailValid(normalizedEmail)) {
+      setError('Please provide a valid email');
+      return;
+    }
+
+    if (trimmedName.length < 2 || trimmedName.length > 50) {
+      setError('Name must be between 2 and 50 characters');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    if (!isPasswordComplex(password)) {
+      setError('Password must contain at least one lowercase letter, one uppercase letter, and one number');
+      return;
+    }
 
       if (password !== confirmPassword) {
          setError('Passwords do not match');
@@ -42,20 +74,25 @@ const RegisterScreen = () => {
       }
 
       try {
-         const responseData = await register({ name, email, password }).unwrap();
+         const responseData = await register({
+            name: trimmedName,
+            email: normalizedEmail,
+            password,
+         }).unwrap();
          dispatch(setCredentials({ ...responseData }));
          navigate(redirect);
       } catch (err) {
-         setError(err?.data?.message || err.error);
+         const validationError = err?.data?.errors?.[0]?.message;
+         setError(validationError || err?.data?.message || err.error || 'Registration failed');
       }
    };
 
    return (
       <FormContainer>
-         <Card className="p-8 shadow-lg">
+         <Card className="p-8">
            <div className="text-center mb-8">
-             <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-             <p className="text-gray-600">Join ShopSphere and start your shopping journey</p>
+             <h1 className="text-2xl font-semibold text-gray-950 mb-2">Create Account</h1>
+             <p className="text-gray-600">Create an account to place orders and save your cart.</p>
            </div>
 
            {error && (
@@ -105,6 +142,9 @@ const RegisterScreen = () => {
                  onChange={(e) => setPassword(e.target.value)}
                  required
                />
+               <p className="mt-1 text-xs text-gray-500">
+                 Use at least 6 characters with uppercase, lowercase, and a number.
+               </p>
              </div>
 
              <div>
@@ -124,7 +164,7 @@ const RegisterScreen = () => {
              <Button
                type="submit"
                disabled={isLoading}
-               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50"
+               className="w-full"
                size="lg"
              >
                {isLoading ? 'Creating Account...' : 'Create Account'}
@@ -142,7 +182,7 @@ const RegisterScreen = () => {
                Already have an account?{' '}
                <Link
                  to={redirect ? `/auth?redirect=${redirect}` : `/auth`}
-                 className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                 className="font-medium text-primary hover:text-primary/80"
                >
                  Sign in
                </Link>

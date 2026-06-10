@@ -7,7 +7,6 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Card } from "../components/ui/Card";
 import { saveShippingAddress } from "../slices/cartSlice";
-import './ShippingScreen.css';
 
 const ShippingScreen = () => {
 
@@ -36,10 +35,10 @@ const ShippingScreen = () => {
       <FormContainer>
          <CheckoutSteps step1 step2 />
          
-         <Card className="p-8 shadow-lg">
+         <Card className="p-8">
             <div className="text-center mb-8">
-               <h1 className="text-3xl font-bold text-gray-900 mb-2">Shipping Address</h1>
-               <p className="text-gray-600">Enter your delivery information</p>
+               <h1 className="text-2xl font-semibold text-gray-950 mb-2">Shipping Address</h1>
+               <p className="text-gray-600">Enter the address for this order.</p>
             </div>
 
             <form onSubmit={formSubmitHandler} className="space-y-6">
@@ -115,7 +114,7 @@ const ShippingScreen = () => {
 
                <Button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
+                  className="w-full"
                   size="lg"
                >
                   Continue to Payment

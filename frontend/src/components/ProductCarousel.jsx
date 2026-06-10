@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "./Loader";
 import Message from "./Message";
 import { useGetTopProductsQuery } from "../slices/productsApiSlice";
@@ -14,21 +13,13 @@ const ProductCarousel = () => {
       if (products && products.length > 0) {
          const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % products.length);
-         }, 5000);
+         }, 6000);
          return () => clearInterval(timer);
       }
    }, [products]);
 
-   const nextSlide = () => {
-      setCurrentSlide((prev) => (prev + 1) % products.length);
-   };
-
-   const prevSlide = () => {
-      setCurrentSlide((prev) => (prev - 1 + products.length) % products.length);
-   };
-
    if (isLoading) return <Loader />;
-   
+
    if (error) {
       return (
          <Message variant='danger'>
@@ -39,153 +30,74 @@ const ProductCarousel = () => {
 
    if (!products || products.length === 0) return null;
 
+   const product = products[currentSlide];
+   const imageVariants = product?.imageVariants || null;
+   const heroImage = imageVariants?.carousel || product.image;
+   const heroSrcSet = imageVariants
+      ? `${imageVariants.card} 480w, ${imageVariants.carousel} 1200w, ${imageVariants.full} 1600w`
+      : undefined;
+
+   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % products.length);
+   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + products.length) % products.length);
+
    return (
-      <div className="relative h-[300px] md:h-[380px] lg:h-[450px] overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 mb-8 shadow-2xl group mx-0">
-         <AnimatePresence mode="wait">
-            <motion.div
-               key={currentSlide}
-               initial={{ opacity: 0, scale: 1.02 }}
-               animate={{ opacity: 1, scale: 1 }}
-               exit={{ opacity: 0, scale: 0.98 }}
-               transition={{ duration: 0.6, ease: "easeInOut" }}
-               className="relative h-full"
-            >
-               <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-black/50 z-10" />
-               
-               <img 
-                  src={products[currentSlide].image} 
-                  alt={products[currentSlide].name}
-                  className="w-full h-full object-cover object-center"
-               />
-
-               <div className="absolute inset-0 z-20 flex items-center">
-                  <div className="w-full max-w-7xl mx-auto px-4 lg:px-8">
-                     <div className="grid lg:grid-cols-2 gap-8 items-center">
-                        {/* Left Content */}
-                        <div className="text-center lg:text-left px-2">
-                           <motion.div 
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.2 }}
-                              className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-black px-4 py-2 rounded-full font-bold text-sm mb-4 shadow-lg"
-                           >
-                              <Sparkles className="w-5 h-5" />
-                              <span>FEATURED PRODUCT</span>
-                           </motion.div>
-
-                           <motion.h1 
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.3 }}
-                              className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight"
-                           >
-                              {products[currentSlide].name}
-                           </motion.h1>
-
-                           <motion.div 
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.4 }}
-                              className="flex items-center justify-center lg:justify-start space-x-2 mb-6"
-                           >
-                              {[...Array(5)].map((_, i) => (
-                                 <Star
-                                    key={i}
-                                    className={`w-5 h-5 ${
-                                       i < Math.floor(products[currentSlide].rating)
-                                          ? 'text-yellow-400 fill-current'
-                                          : 'text-white/30'
-                                    }`}
-                                 />
-                              ))}
-                              <span className="text-white/90 text-base ml-3 font-medium">
-                                 ({products[currentSlide].numReviews} reviews)
-                              </span>
-                           </motion.div>
-
-                           <motion.div 
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.5 }}
-                              className="text-4xl md:text-5xl font-bold text-white mb-8"
-                           >
-                              <span className="text-green-400">$</span>{products[currentSlide].price}
-                           </motion.div>
-
-                           <motion.div 
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.6 }}
-                              className="flex flex-col sm:flex-row gap-4"
-                           >
-                              <Link 
-                                 to={`/product/${products[currentSlide]._id}`}
-                                 className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-xl font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 flex items-center justify-center space-x-3 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                              >
-                                 <span className="text-lg">Shop Now</span>
-                                 <ChevronRight className="w-5 h-5" />
-                              </Link>
-                              <Link 
-                                 to={`/product/${products[currentSlide]._id}`}
-                                 className="border-2 border-white/80 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 backdrop-blur-sm"
-                              >
-                                 View Details
-                              </Link>
-                           </motion.div>
-                        </div>
-
-                        {/* Right Content - Product Image */}
-                        <div className="hidden lg:flex justify-center items-center">
-                           <motion.div
-                              initial={{ opacity: 0, x: 50 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.4 }}
-                              className="relative max-w-sm"
-                           >
-                              <img 
-                                 src={products[currentSlide].image} 
-                                 alt={products[currentSlide].name}
-                                 className="w-full h-auto rounded-xl shadow-2xl border-4 border-white/20 backdrop-blur-sm transform hover:scale-105 transition-transform duration-500"
-                              />
-                              <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/20 to-transparent" />
-                           </motion.div>
-                        </div>
-                     </div>
-                  </div>
+      <section className="mb-8 overflow-hidden rounded-lg border border-gray-200 bg-white">
+         <div className="grid min-h-[320px] md:grid-cols-2">
+            <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+               <p className="section-kicker mb-3">Featured Product</p>
+               <h1 className="mb-4 max-w-xl text-3xl font-semibold leading-tight text-gray-950 md:text-4xl">
+                  {product.name}
+               </h1>
+               <p className="mb-6 text-sm text-gray-600">
+                  ${product.price} · {product.numReviews || 0} reviews
+               </p>
+               <div className="flex flex-wrap gap-3">
+                  <Link to={`/product/${product._id}`} className="btn-primary">
+                     View product
+                  </Link>
+                  <Link to="/products" className="btn-outline">
+                     Browse all
+                  </Link>
                </div>
-            </motion.div>
-         </AnimatePresence>
+            </div>
 
-         {/* Navigation Buttons */}
-         <button
-            onClick={prevSlide}
-            className="absolute left-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/40 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110"
-         >
-            <ChevronLeft className="w-6 h-6" />
-         </button>
-         
-         <button
-            onClick={nextSlide}
-            className="absolute right-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/40 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110"
-         >
-            <ChevronRight className="w-6 h-6" />
-         </button>
-
-         {/* Slide Indicators */}
-         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex space-x-2">
-            {products.map((_, index) => (
-               <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`transition-all duration-300 ${ 
-                     index === currentSlide 
-                        ? 'w-10 h-2 bg-white rounded-full shadow-lg' 
-                        : 'w-2 h-2 bg-white/40 rounded-full hover:bg-white/60'
-                  }`}
+            <Link to={`/product/${product._id}`} className="block bg-gray-100">
+               <img
+                  src={heroImage}
+                  srcSet={heroSrcSet}
+                  sizes={heroSrcSet ? '100vw' : undefined}
+                  alt={product.name}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
+                  className="h-64 w-full object-cover md:h-full"
                />
-            ))}
+            </Link>
          </div>
-      </div>
+
+         <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3">
+            <div className="flex gap-2">
+               {products.map((_, index) => (
+                  <button
+                     key={index}
+                     type="button"
+                     onClick={() => setCurrentSlide(index)}
+                     className={`h-2 rounded-full transition-colors ${index === currentSlide ? 'w-6 bg-primary' : 'w-2 bg-gray-300'}`}
+                     aria-label={`Show featured product ${index + 1}`}
+                  />
+               ))}
+            </div>
+
+            <div className="flex gap-2">
+               <button type="button" onClick={prevSlide} className="rounded-md border border-gray-300 p-2 text-gray-700 hover:bg-gray-50" aria-label="Previous featured product">
+                  <ChevronLeft className="h-4 w-4" />
+               </button>
+               <button type="button" onClick={nextSlide} className="rounded-md border border-gray-300 p-2 text-gray-700 hover:bg-gray-50" aria-label="Next featured product">
+                  <ChevronRight className="h-4 w-4" />
+               </button>
+            </div>
+         </div>
+      </section>
    );
 };
 

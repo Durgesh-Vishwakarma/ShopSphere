@@ -32,14 +32,14 @@ const CartScreen = () => {
 
 
    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-         <div className="grid lg:grid-cols-3 gap-8">
+      <div>
+         <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2">
                <div className="flex items-center justify-between mb-6">
-                  <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+                  <h1 className="text-2xl font-semibold text-gray-950">Shopping Cart</h1>
                   <Button 
                      onClick={() => navigate('/')}
-                     className="inline-flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                     variant="outline"
                   >
                      <ArrowLeft className="w-4 h-4 mr-2" />
                      Continue Shopping
@@ -52,7 +52,7 @@ const CartScreen = () => {
                      <Message>Your Shopping Cart is Empty</Message>
                      <Button 
                         onClick={() => navigate('/')}
-                        className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+                        className="mt-4"
                      >
                         Start Shopping
                      </Button>
@@ -60,25 +60,25 @@ const CartScreen = () => {
                ) : (
                   <div className="space-y-4">
                      {cartItems.map((item) => (
-                        <Card key={item._id} className="p-6">
-                           <div className="flex items-center space-x-4">
+                        <Card key={item._id} className="p-4 sm:p-6">
+                           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                               <div className="flex-shrink-0">
                                  <Image 
                                     src={item.image} 
                                     alt={item.name} 
-                                    className="w-20 h-20 object-cover rounded-lg"
+                                    className="h-20 w-20 rounded-md object-cover"
                                  />
                               </div>
                               <div className="flex-1 min-w-0">
                                  <Link 
                                     to={`/product/${item._id}`}
-                                    className="text-lg font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                                    className="text-lg font-medium text-gray-900 hover:text-primary transition-colors"
                                  >
                                     {item.name}
                                  </Link>
                                  <p className="text-lg font-semibold text-gray-900 mt-1">${item.price}</p>
                               </div>
-                              <div className="flex items-center space-x-3">
+                              <div className="flex items-center gap-3">
                                  <Select 
                                     value={item.qty}
                                     onChange={(e) => addToCartHandler(item, Number(e.target.value))}
@@ -92,7 +92,8 @@ const CartScreen = () => {
                                  </Select>
                                  <Button 
                                     onClick={() => removeFromCartHandler(item._id)}
-                                    className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                                    variant="ghost"
+                                    size="icon"
                                  >
                                     <Trash2 className="w-4 h-4" />
                                  </Button>
@@ -106,8 +107,8 @@ const CartScreen = () => {
 
             {/* Cart Summary */}
             <div className="lg:col-span-1">
-               <Card className="p-6 sticky top-8">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Summary</h2>
+               <Card className="sticky top-20 p-6">
+                  <h2 className="text-xl font-semibold text-gray-950 mb-4">Order Summary</h2>
                   
                   <div className="space-y-4 mb-6">
                      <div className="flex justify-between">
@@ -123,7 +124,7 @@ const CartScreen = () => {
                   <Button 
                      onClick={checkoutHandler}
                      disabled={!cartItems.length}
-                     className="w-full bg-gray-900 hover:bg-orange-500 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                     className="w-full"
                      size="lg"
                   >
                      Proceed To Checkout

@@ -9,7 +9,7 @@ import { useGetUsersQuery, useDeleteUserMutation } from "../../slices/usersApiSl
 
 const UserListScreen = () => {
 
-   const { data: users, refetch, isLoading, error } = useGetUsersQuery();
+   const { data: users, isLoading, error } = useGetUsersQuery();
 
    const [deleteUser, { isLoading: deleteLoading }] = useDeleteUserMutation();
    
@@ -18,8 +18,7 @@ const UserListScreen = () => {
       if (window.confirm('Are you sure you want to delete the user?')) {
 
          try {
-            await deleteUser(id);
-            refetch();
+            await deleteUser(id).unwrap();
          } catch (err) {
             // Handle error silently or with toast notification
          }
