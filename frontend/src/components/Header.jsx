@@ -48,20 +48,20 @@ const Header = () => {
    const totalWishlistItems = wishlistItems.length;
 
    return (
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
-         <div className="container flex h-16 items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur">
+         <div className="container flex h-20 items-center justify-between gap-5">
             <Link to="/" className="flex items-center gap-2">
-               <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-white">
+               <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
                   <Store className="h-5 w-5" />
                </span>
-               <span className="text-xl font-semibold text-gray-950">ShopSphere</span>
+               <span className="text-2xl font-semibold text-gray-950">ShopSphere</span>
             </Link>
 
             <div className="hidden flex-1 justify-center md:flex">
                <SearchBox />
             </div>
 
-            <nav className="hidden items-center gap-1 md:flex">
+            <nav className="hidden items-center gap-2 md:flex">
                {userInfo && (
                   <Link to="/wishlist">
                      <Button variant="ghost" size="icon" className="relative" title="Wishlist">

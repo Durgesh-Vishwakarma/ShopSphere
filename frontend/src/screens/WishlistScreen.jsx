@@ -22,7 +22,7 @@ const WishlistScreen = () => {
       return (
          <>
             <Meta title="Wishlist - Login Required | ShopSphere" />
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
+            <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center bg-gray-50 py-8">
                <Card className="max-w-md mx-auto p-8 text-center">
                   <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <h2 className="text-2xl font-semibold text-gray-900 mb-2">Sign in to view your wishlist</h2>
@@ -31,7 +31,7 @@ const WishlistScreen = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3">
                      <Link to="/auth">
-                        <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+                        <Button className="w-full">
                            Sign In
                         </Button>
                      </Link>
@@ -70,8 +70,8 @@ const WishlistScreen = () => {
       <>
          <Meta title="My Wishlist | ShopSphere" />
          
-         <div className="min-h-screen bg-gray-50 py-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+         <div className="bg-gray-50 py-2">
+            <div>
                {/* Header */}
                <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center space-x-4">
@@ -111,7 +111,7 @@ const WishlistScreen = () => {
                            Browse products and click the <Heart className="w-4 h-4 inline mx-1" /> icon to add items to your wishlist!
                         </p>
                         <Link to="/">
-                           <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                           <Button>
                               Start Shopping
                            </Button>
                         </Link>
@@ -162,7 +162,7 @@ const WishlistScreen = () => {
                               {/* Content */}
                               <div className="p-4 space-y-3">
                                  <Link to={`/product/${item._id}`}>
-                                    <h3 className="font-semibold text-gray-900 hover:text-orange-600 transition-colors line-clamp-2">
+                                    <h3 className="font-semibold text-gray-900 hover:text-primary transition-colors line-clamp-2">
                                        {item.name}
                                     </h3>
                                  </Link>
@@ -193,7 +193,7 @@ const WishlistScreen = () => {
                                        size="sm"
                                        disabled={item.countInStock === 0}
                                        onClick={() => addToCartHandler(item)}
-                                       className="bg-orange-500 hover:bg-orange-600 text-white flex items-center space-x-1"
+                                       className="flex items-center space-x-1"
                                     >
                                        <ShoppingCart className="w-4 h-4" />
                                        <span>Add to Cart</span>
@@ -219,7 +219,7 @@ const WishlistScreen = () => {
                            <span>Clear Wishlist</span>
                         </Button>
                         <Link to="/">
-                           <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                           <Button>
                               Continue Shopping
                            </Button>
                         </Link>

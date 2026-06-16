@@ -21,7 +21,7 @@ Your ShopSphere e-commerce platform is now fully modernized and ready for deploy
 
 5. **Set Environment Variables**:
    ```
-   VITE_API_URL=https://your-render-backend-url.onrender.com
+   VITE_API_URL=https://shopsphere-u4s8.onrender.com
    ```
 
 6. **Deploy**: Click "Deploy" and wait for completion
@@ -57,7 +57,7 @@ After Render deployment:
 1. Copy your Render service URL
 2. Update `frontend/.env`:
    ```
-   VITE_API_URL=https://shopsphere-backend-xyz.onrender.com
+   VITE_API_URL=https://shopsphere-u4s8.onrender.com
    ```
 3. Commit and push - Vercel will auto-redeploy
 
@@ -95,8 +95,8 @@ After Render deployment:
 
 ### 🌐 Production Links
 - **Frontend**: `https://shop-sphere-kohl.vercel.app`
-- **Backend API**: `https://shopsphere-backend-xyz.onrender.com`
-- **API Docs**: `https://shopsphere-backend-xyz.onrender.com/api-docs`
+- **Backend API**: `https://shopsphere-u4s8.onrender.com`
+- **API Docs**: `https://shopsphere-u4s8.onrender.com/api-docs`
 
 ### 🔗 Repository Links
 - **GitHub**: `https://github.com/yourusername/ShopSphere`

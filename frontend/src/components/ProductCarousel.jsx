@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "./Loader";
-import Message from "./Message";
 import { useGetTopProductsQuery } from "../slices/productsApiSlice";
 
 const ProductCarousel = () => {
@@ -18,15 +17,9 @@ const ProductCarousel = () => {
       }
    }, [products]);
 
-   if (isLoading) return <Loader />;
+   if (isLoading) return <Loader label="Loading featured products" />;
 
-   if (error) {
-      return (
-         <Message variant='danger'>
-           {error.data?.message || error.error || error.status || "Something went wrong"}
-         </Message>
-      );
-   }
+   if (error) return null;
 
    if (!products || products.length === 0) return null;
 
@@ -41,9 +34,9 @@ const ProductCarousel = () => {
    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + products.length) % products.length);
 
    return (
-      <section className="mb-8 overflow-hidden rounded-lg border border-gray-200 bg-white">
-         <div className="grid min-h-[320px] md:grid-cols-2">
-            <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+      <section className="mb-10 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm shadow-gray-950/5">
+         <div className="grid min-h-[380px] md:grid-cols-2">
+            <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
                <p className="section-kicker mb-3">Featured Product</p>
                <h1 className="mb-4 max-w-xl text-3xl font-semibold leading-tight text-gray-950 md:text-4xl">
                   {product.name}
@@ -75,7 +68,7 @@ const ProductCarousel = () => {
             </Link>
          </div>
 
-         <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3">
+         <div className="flex items-center justify-between border-t border-gray-200 px-5 py-4">
             <div className="flex gap-2">
                {products.map((_, index) => (
                   <button
@@ -89,10 +82,10 @@ const ProductCarousel = () => {
             </div>
 
             <div className="flex gap-2">
-               <button type="button" onClick={prevSlide} className="rounded-md border border-gray-300 p-2 text-gray-700 hover:bg-gray-50" aria-label="Previous featured product">
+               <button type="button" onClick={prevSlide} className="btn-outline h-10 w-10 px-0 py-0" aria-label="Previous featured product">
                   <ChevronLeft className="h-4 w-4" />
                </button>
-               <button type="button" onClick={nextSlide} className="rounded-md border border-gray-300 p-2 text-gray-700 hover:bg-gray-50" aria-label="Next featured product">
+               <button type="button" onClick={nextSlide} className="btn-outline h-10 w-10 px-0 py-0" aria-label="Next featured product">
                   <ChevronRight className="h-4 w-4" />
                </button>
             </div>

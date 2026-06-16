@@ -54,40 +54,40 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
 
   .btn-primary {
-    @apply btn bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow-sm;
+    @apply btn h-11 bg-primary px-5 py-2.5 text-primary-foreground shadow-sm shadow-blue-950/10 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-md;
   }
 
   .btn-secondary {
-    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2;
+    @apply btn h-11 bg-secondary px-5 py-2.5 text-secondary-foreground hover:-translate-y-0.5 hover:bg-secondary/80;
   }
 
   .btn-outline {
-    @apply btn border border-input bg-white text-gray-800 hover:bg-gray-50 h-10 px-4 py-2;
+    @apply btn h-11 border border-gray-300 bg-white px-5 py-2.5 text-gray-800 shadow-sm hover:-translate-y-0.5 hover:border-primary/40 hover:bg-blue-50/50 hover:text-primary;
   }
 
   .btn-ghost {
-    @apply btn text-gray-700 hover:bg-gray-100 hover:text-gray-950 h-10 px-3 py-2;
+    @apply btn h-11 px-4 py-2.5 text-gray-700 hover:bg-gray-100 hover:text-gray-950;
   }
 
   .btn-destructive {
-    @apply btn bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2 shadow-sm;
+    @apply btn h-11 bg-destructive px-5 py-2.5 text-destructive-foreground shadow-sm hover:-translate-y-0.5 hover:bg-destructive/90 hover:shadow-md;
   }
 
   .card,
   .modern-card {
-    @apply rounded-lg border border-gray-200 bg-white text-card-foreground shadow-sm;
+    @apply rounded-lg border border-gray-200 bg-white text-card-foreground shadow-sm shadow-gray-950/5;
   }
 
   .input {
-    @apply flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm placeholder:text-gray-400 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .container {
-    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[95rem] px-4 sm:px-6 lg:px-8 2xl:px-10;
   }
 
   .page-shell {

@@ -26,7 +26,7 @@ const UserListScreen = () => {
    };
 
    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="py-2">
          <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Users Management</h1>
             <p className="text-gray-600 mt-2">Manage user accounts and permissions</p>
@@ -86,14 +86,15 @@ const UserListScreen = () => {
                                  <div className="flex items-center space-x-2">
                                     <Link
                                        to={`/admin/user/${user._id}/edit`}
-                                       className="inline-flex items-center px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-sm font-medium rounded-lg transition-colors"
+                                       className="btn-outline h-10 px-3 py-2"
                                     >
                                        <Edit className="w-4 h-4 mr-1" />
                                        Edit
                                     </Link>
                                     <Button 
                                        onClick={() => deleteUserHandler(user._id)}
-                                       className="inline-flex items-center px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium rounded-lg transition-colors"
+                                       variant="destructive"
+                                       size="sm"
                                     >
                                        <Trash2 className="w-4 h-4 mr-1" />
                                        Delete

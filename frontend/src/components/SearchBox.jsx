@@ -18,7 +18,7 @@ const SearchBox = () => {
   };
 
   return (
-    <form onSubmit={formSubmitHandler} className="relative flex w-full max-w-md">
+    <form onSubmit={formSubmitHandler} className="relative flex w-full max-w-2xl">
       <div className="relative flex-1">
         <input
           type="text"
@@ -30,7 +30,7 @@ const SearchBox = () => {
         />
         <button
           type="submit"
-          className="absolute right-1 top-1/2 -translate-y-1/2 rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
           aria-label="Search"
         >
           <Search className="w-4 h-4" />

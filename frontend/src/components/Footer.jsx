@@ -7,10 +7,10 @@ const Footer = () => {
    return (
       <footer className="border-t border-gray-200 bg-white text-gray-700">
          <div className="container">
-            <div className="grid gap-8 py-10 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-4">
                <div>
                   <div className="mb-4 flex items-center gap-2">
-                     <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-white">
+                     <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
                         <Store className="h-5 w-5" />
                      </span>
                      <span className="text-lg font-semibold text-gray-950">ShopSphere</span>
@@ -23,7 +23,7 @@ const Footer = () => {
                         <a
                            key={index}
                            href="#"
-                           className="rounded-md border border-gray-200 p-2 text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                           className="rounded-lg border border-gray-200 p-2.5 text-gray-500 transition-colors hover:border-primary/30 hover:bg-blue-50/50 hover:text-primary"
                            aria-label="Social link"
                         >
                            <Icon className="h-4 w-4" />

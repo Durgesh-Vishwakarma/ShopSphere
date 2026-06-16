@@ -8,7 +8,7 @@ const App = () => {
     <div className="page-shell">
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 py-8">
+        <main className="flex-1 py-8 sm:py-10 lg:py-12">
           <div className="container">
             <Outlet />
           </div>

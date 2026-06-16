@@ -43,7 +43,7 @@ const ProductListScreen = () => {
    };
 
    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="py-2">
          <div className="flex justify-between items-center mb-8">
             <div>
                <h1 className="text-3xl font-bold text-gray-900">Products Management</h1>
@@ -51,7 +51,6 @@ const ProductListScreen = () => {
             </div>
             <Button 
                onClick={createProductHandler}
-               className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
             >
                <Plus className="w-4 h-4 mr-2" />
                Create Product
@@ -113,14 +112,15 @@ const ProductListScreen = () => {
                                  <div className="flex items-center space-x-2">
                                     <Link
                                        to={`/admin/product/${product._id}/edit`}
-                                       className="inline-flex items-center px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-sm font-medium rounded-lg transition-colors"
+                                       className="btn-outline h-10 px-3 py-2"
                                     >
                                        <Edit className="w-4 h-4 mr-1" />
                                        Edit
                                     </Link>
                                     <Button 
                                        onClick={() => deleteProductHandler(product._id)}
-                                       className="inline-flex items-center px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium rounded-lg transition-colors"
+                                       variant="destructive"
+                                       size="sm"
                                     >
                                        <Trash2 className="w-4 h-4 mr-1" />
                                        Delete

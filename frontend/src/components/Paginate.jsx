@@ -28,12 +28,12 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
    const visiblePages = getVisiblePages();
 
    return (
-      <nav className="flex items-center justify-center space-x-1">
+      <nav className="flex items-center justify-center gap-2">
          {/* Previous Button */}
          {page > 1 && (
             <Link
                to={getPageUrl(page - 1)}
-               className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors duration-200"
+               className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-blue-50/50 hover:text-primary"
             >
                <ChevronLeft className="w-5 h-5" />
             </Link>
@@ -44,12 +44,12 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
             <>
                <Link
                   to={getPageUrl(1)}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                  className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-blue-50/50 hover:text-primary"
                >
                   1
                </Link>
                {visiblePages[0] > 2 && (
-                  <span className="flex items-center justify-center w-10 h-10 text-gray-400">
+                  <span className="flex h-11 w-11 items-center justify-center text-gray-400">
                      ...
                   </span>
                )}
@@ -61,10 +61,10 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
             <Link
                key={pageNum}
                to={getPageUrl(pageNum)}
-               className={`flex items-center justify-center w-10 h-10 rounded-lg border transition-colors duration-200 ${
+               className={`flex h-11 w-11 items-center justify-center rounded-lg border text-sm font-semibold transition-all duration-200 ${
                   pageNum === page
-                     ? 'border-blue-500 bg-blue-500 text-white'
-                     : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                     ? 'border-primary bg-primary text-white shadow-sm'
+                     : 'border-gray-300 bg-white text-gray-700 shadow-sm hover:-translate-y-0.5 hover:border-primary/40 hover:bg-blue-50/50 hover:text-primary'
                }`}
             >
                {pageNum}
@@ -75,13 +75,13 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
          {visiblePages[visiblePages.length - 1] < pages && (
             <>
                {visiblePages[visiblePages.length - 1] < pages - 1 && (
-                  <span className="flex items-center justify-center w-10 h-10 text-gray-400">
+                  <span className="flex h-11 w-11 items-center justify-center text-gray-400">
                      ...
                   </span>
                )}
                <Link
                   to={getPageUrl(pages)}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                  className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-blue-50/50 hover:text-primary"
                >
                   {pages}
                </Link>
@@ -92,7 +92,7 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
          {page < pages && (
             <Link
                to={getPageUrl(page + 1)}
-               className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors duration-200"
+               className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-blue-50/50 hover:text-primary"
             >
                <ChevronRight className="w-5 h-5" />
             </Link>

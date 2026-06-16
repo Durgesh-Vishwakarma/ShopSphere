@@ -88,7 +88,7 @@ const ProductEditScreen = () => {
 
    return (
       <div className="space-y-4">
-         <Link to='/admin/productlist' className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+         <Link to='/admin/productlist' className="btn-outline h-10 w-fit px-4 py-2">
             Back to products
          </Link>
 
@@ -193,7 +193,7 @@ const ProductEditScreen = () => {
                            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                            <textarea
                               id="description"
-                              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="input min-h-32"
                               placeholder="Enter description"
                               rows={4}
                               value={description}
@@ -202,7 +202,7 @@ const ProductEditScreen = () => {
                            />
                         </div>
 
-                        <Button type='submit' className='w-full bg-blue-600 hover:bg-blue-700 text-white'>
+                        <Button type='submit' className='w-full' loading={updateLoading}>
                            Update Product
                         </Button>
                      </form>

@@ -18,7 +18,7 @@
 ### 🔧 **Environment Variables:**
 Add this in Vercel dashboard:
 ```
-VITE_API_URL=https://your-render-backend-url.onrender.com
+VITE_API_URL=https://shopsphere-u4s8.onrender.com
 ```
 
 ### ✅ **Why This Works:**

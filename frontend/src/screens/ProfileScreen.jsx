@@ -58,8 +58,8 @@ const ProfileScreen = () => {
    };
 
    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-         <div className="grid lg:grid-cols-4 gap-8">
+      <div className="py-2">
+         <div className="grid gap-8 lg:grid-cols-4">
             {/* User Profile Form */}
             <div className="lg:col-span-1">
                <Card className="p-6">
@@ -130,10 +130,11 @@ const ProfileScreen = () => {
                      
                      <Button 
                         type="submit" 
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors"
+                        className="w-full"
                         disabled={updateProfileLoading}
+                        loading={updateProfileLoading}
                      >
-                        {updateProfileLoading ? 'Updating...' : 'Update Profile'}
+                        Update Profile
                      </Button>
                   </form>
                </Card>
@@ -212,7 +213,7 @@ const ProfileScreen = () => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                        <Link
                                           to={`/order/${order._id}`}
-                                          className="inline-flex items-center px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
+                                          className="btn-outline h-10 px-3 py-2"
                                        >
                                           <Eye className="w-4 h-4 mr-1" />
                                           Details

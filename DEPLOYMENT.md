@@ -49,7 +49,7 @@ vercel
 ### Environment Variables (Vercel)
 Set these in your Vercel dashboard:
 ```env
-VITE_API_URL=https://your-backend-on-render.com
+VITE_API_URL=https://shopsphere-u4s8.onrender.com
 ```
 
 ### Build Configuration

@@ -19,10 +19,10 @@ const Button = React.forwardRef(({
   }
 
   const sizes = {
-    sm: 'h-8 px-3 text-xs',
-    default: 'h-10 px-4 py-2',
-    lg: 'h-12 px-8',
-    icon: 'h-10 w-10',
+    sm: 'h-9 px-3 text-xs',
+    default: 'h-11 px-5 py-2.5',
+    lg: 'h-12 px-7 text-base',
+    icon: 'h-11 w-11 px-0',
   }
 
   return (
@@ -40,8 +40,10 @@ const Button = React.forwardRef(({
       {...props}
     >
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <div className="absolute inset-0 flex items-center justify-center gap-1">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current [animation-delay:120ms]" />
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current [animation-delay:240ms]" />
         </div>
       )}
       {children}

@@ -6,10 +6,11 @@ import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import { ArrowLeft } from 'lucide-react';
 import { useGetProductsQuery } from '../slices/productsApiSlice.js';
+import { getApiErrorMessage } from '../utils/errorUtils.js';
 
 const HomeScreen = () => {
    const { keyword, pageNumber } = useParams();
-   const { data, isLoading, error } = useGetProductsQuery({ keyword, pageNumber });
+   const { data, isLoading, error, refetch } = useGetProductsQuery({ keyword, pageNumber });
 
    return (
       <div className="space-y-8">
@@ -18,7 +19,7 @@ const HomeScreen = () => {
          ) : (
             <Link
                to="/"
-               className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+               className="btn-outline"
             >
                <ArrowLeft className="mr-2 h-4 w-4" />
                Back to home
@@ -27,11 +28,20 @@ const HomeScreen = () => {
 
          {isLoading ? (
             <div className="flex justify-center py-16">
-               <Loader />
+               <Loader label="Loading products" />
             </div>
          ) : error ? (
             <Message variant="danger">
-               {error?.data?.message || error.error}
+               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <span>{getApiErrorMessage(error)}</span>
+                  <button
+                     type="button"
+                     onClick={refetch}
+                     className="btn-outline h-10 border-red-200 px-4 py-2 text-red-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+                  >
+                     Retry
+                  </button>
+               </div>
             </Message>
          ) : (
             <section className="space-y-6">
@@ -49,7 +59,7 @@ const HomeScreen = () => {
                   </p>
                </div>
 
-               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                   {data.products.map((product) => (
                      <Product key={product._id} product={product} />
                   ))}

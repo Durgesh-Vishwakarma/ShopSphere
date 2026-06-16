@@ -58,7 +58,7 @@ const Product = ({ product }) => {
             />
          </Link>
 
-         <div className="flex h-[calc(100%-theme(spacing.0))] flex-col gap-3 p-4">
+         <div className="flex h-[calc(100%-theme(spacing.0))] flex-col gap-4 p-5">
             <div className="flex items-start justify-between gap-3">
                <div className="min-w-0">
                   {product.category && (
@@ -76,10 +76,10 @@ const Product = ({ product }) => {
                <button
                   type="button"
                   onClick={wishlistHandler}
-                  className={`shrink-0 rounded-md border p-2 transition-colors ${
+                  className={`shrink-0 rounded-lg border p-2.5 transition-all hover:-translate-y-0.5 ${
                      isInWishlist
-                        ? 'border-red-200 bg-red-50 text-red-600'
-                        : 'border-gray-200 bg-white text-gray-500 hover:text-gray-900'
+                        ? 'border-red-200 bg-red-50 text-red-600 shadow-sm'
+                        : 'border-gray-200 bg-white text-gray-500 hover:border-primary/30 hover:bg-blue-50/50 hover:text-primary'
                   }`}
                   title={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
                >
@@ -101,7 +101,7 @@ const Product = ({ product }) => {
                   type="button"
                   onClick={addToCartHandler}
                   disabled={product.countInStock === 0}
-                  className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500"
+                  className="btn-primary h-11 px-4 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500 disabled:shadow-none"
                >
                   <ShoppingCart className="h-4 w-4" />
                   Add

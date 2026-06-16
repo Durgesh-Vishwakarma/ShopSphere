@@ -1,29 +1,32 @@
 import { motion } from 'framer-motion';
 
-const Loader = () => {
+const Loader = ({ label = 'Loading' }) => {
+   const bars = [0, 1, 2];
+
    return (
-      <div className="flex items-center justify-center p-8">
-         <div className="relative">
-            {/* Outer ring */}
-            <motion.div
-               className="w-16 h-16 border-4 border-blue-200 rounded-full"
-               animate={{ rotate: 360 }}
-               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            />
-            
-            {/* Inner ring */}
-            <motion.div
-               className="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-t-blue-600 rounded-full"
-               animate={{ rotate: 360 }}
-               transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-            />
-            
-            {/* Center dot */}
-            <motion.div
-               className="absolute top-1/2 left-1/2 w-2 h-2 bg-blue-600 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-               animate={{ scale: [1, 1.2, 1] }}
-               transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-            />
+      <div className="flex items-center justify-center p-8" role="status" aria-live="polite">
+         <div className="flex min-w-48 flex-col items-center gap-4 rounded-lg border border-gray-200 bg-white px-6 py-5 shadow-sm">
+            <div className="flex h-10 items-end gap-2">
+               {bars.map((bar) => (
+                  <motion.span
+                     key={bar}
+                     className="block w-2.5 rounded-full bg-primary"
+                     initial={{ height: 16, opacity: 0.45 }}
+                     animate={{ height: [16, 34, 20, 28, 16], opacity: [0.45, 1, 0.7, 0.9, 0.45] }}
+                     transition={{
+                        duration: 1.25,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        delay: bar * 0.14,
+                     }}
+                  />
+               ))}
+            </div>
+
+            <div className="space-y-1 text-center">
+               <p className="text-sm font-semibold text-gray-900">{label}</p>
+               <p className="text-xs text-gray-500">Getting things ready...</p>
+            </div>
          </div>
       </div>
    );
